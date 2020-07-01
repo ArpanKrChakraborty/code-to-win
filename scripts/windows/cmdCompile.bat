@@ -1,5 +1,5 @@
 @echo off
-:: Compile and then run against testcases and give associated verdict
+:: Compile the file and send appropriate error code
 :: argument list: {fileType Ex:cpp,java,c,py}  {Name of the file with extension} {Name of the file without extension} {comm file location}
 set ext=%1
 set fileNameWithExtension= %2

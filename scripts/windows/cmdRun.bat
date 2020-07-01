@@ -10,7 +10,7 @@ set finalResult=%5
 set no=%6
 set verdict=WA (Wrong Answer)
 set timeLimit=%7
-if %no%==1 echo Compilation Successful! > %finalResult% && CLS && echo Running Against Test-Cases: && echo (Execution Will be halted automatically after 1 min to avoid infinte loop execution)
+if %no%==1 echo Compilation Successful! > %finalResult% && CLS && echo Running Against Test-Cases: && echo (Process Will be halted automatically after 1 min to avoid infinte loop execution)
 set start=%time%
 %fileNameNoExtension% < %input% > %result% 
 set end=%time%

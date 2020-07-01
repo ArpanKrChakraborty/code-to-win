@@ -268,7 +268,7 @@ function activate(context) {
 
 				// extDir stores the uri to scripts folder witin the extension folder
 
-				let extDir=vscode.extensions.getExtension('Arpan.codetowin').extensionUri.fsPath+"\\scripts";
+				let extDir=vscode.extensions.getExtension('Arpan.codetowin').extensionUri.fsPath+"\\scripts\\windows";
 
 				vscode.window.showInformationMessage("Compiling");
 
