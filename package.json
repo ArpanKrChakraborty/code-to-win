@@ -28,7 +28,7 @@
 			}
 		],
 		"configuration":{
-			"title": "Code To WIn",
+			"title": "codetowin",
 			"properties": {
 				"codetowin.terminal":{
 					"type":"string",

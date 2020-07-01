@@ -208,67 +208,128 @@ function activate(context) {
 
 		let workspace_path=workspace_uri.fsPath;
 
-		// Create a Terminal
+		// Get the current active editor in variable activeSourceCode
 
-		// Check what terminal it is: cmd / powershell / bash
+		let activeSourceCode=vscode.window.activeTextEditor;
 
-		if(vscode.workspace.getConfiguration().get('codetowin').terminal==="cmd"){
+		// If there is a active text editor opened and the variable value is not undefined :
 
-			// A central terminal
+		if(activeSourceCode){
 
-			let centralTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Central Terminal",shellPath:"C:\\Windows\\System32\\cmd.exe",hideFromUser:true});
+			// Get the extension of the active document
 
-			// Create the first background terminal for Compiling the file
+			let fileExt=activeSourceCode.document.languageId;
 
-			let term=vscode.window.createTerminal({cwd:workspace_path,name:"Compile File",shellPath:"C:\\Windows\\System32\\cmd.exe",hideFromUser:true});
+			// Get the fileNameWithExtension of the active document
 
-			// Get the current active editor in variable activeSourceCode
+			let fileNameWithExtension=activeSourceCode.document.fileName;
+			fileNameWithExtension=fileNameWithExtension.slice(workspace_path.length+1);
 
-			let activeSourceCode=vscode.window.activeTextEditor;
+			// Get the fileNameWithoutExtension of the active document
 
-			// If there is a active text editor opened and the variable value is not undefined :
+			let fileNameWithoutExtension=fileNameWithExtension.slice(0,fileNameWithExtension.indexOf('.'));
 
-			if(activeSourceCode){
+			// Get the timeLimit associated with this question
 
-				// Get the extension of the active document
+			let timeLimit;
 
-				let fileExt=activeSourceCode.document.languageId;
-
-				// Get the fileNameWithExtension of the active document
-
-				let fileNameWithExtension=activeSourceCode.document.fileName;
-				fileNameWithExtension=fileNameWithExtension.slice(workspace_path.length+1);
-
-				// Get the fileNameWithoutExtension of the active document
-
-				let fileNameWithoutExtension=fileNameWithExtension.slice(0,fileNameWithExtension.indexOf('.'));
-
-				// Get the timeLimit associated with this question
-
-				let timeLimit;
-
-				for(let i=0;i<global_infoArr.length;i++){
-					if(global_infoArr[i].problem === fileNameWithoutExtension){
-						timeLimit=global_infoArr[i].timeLimit;
-						break;
-					}
+			for(let i=0;i<global_infoArr.length;i++){
+				if(global_infoArr[i].problem === fileNameWithoutExtension){
+					timeLimit=global_infoArr[i].timeLimit;
+					break;
 				}
+			}
 
-				// testcaseDir keeps the path to locationOfOpenedFolder\\testcases\\fileName
+			// testcaseDir keeps the path to locationOfOpenedFolder\\testcases\\fileName
 
-				let testcaseDir=(workspace_path+"\\testcases\\"+fileNameWithoutExtension);
+			let testcaseDir=(workspace_path+"\\testcases\\"+fileNameWithoutExtension);
 
-				// fileList keeps an array of filenames in testcaseDir
+			// fileList keeps an array of filenames in testcaseDir
 
-				let fileList=fs.readdirSync((workspace_path+"\\testcases\\"+fileNameWithoutExtension));
+			let fileList=fs.readdirSync((workspace_path+"\\testcases\\"+fileNameWithoutExtension));
 
-				// noFiles = No of files(Input+Output=1 File) in fileList
+			// noFiles = No of files(Input+Output=1 File) in fileList
 
-				let noFiles=fileList.length/2;
+			let noFiles=fileList.length/2;
+
+			let extDirPath=vscode.extensions.getExtension('Arpan.codetowin').extensionUri.fsPath
+			
+			// Check what terminal it is: cmd / powershell / bash
+
+			if(vscode.workspace.getConfiguration().get('codetowin').terminal==="cmd"){
+
+				// A central terminal
+
+				let centralTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Central Terminal",shellPath:"C:\\Windows\\System32\\cmd.exe",hideFromUser:true});
+
+				// Create the first background terminal for Compiling the file
+
+				let term=vscode.window.createTerminal({cwd:workspace_path,name:"Compile File",shellPath:"C:\\Windows\\System32\\cmd.exe",hideFromUser:true});
 
 				// extDir stores the uri to scripts folder witin the extension folder
 
-				let extDir=vscode.extensions.getExtension('Arpan.codetowin').extensionUri.fsPath+"\\scripts\\windows";
+				let extDir=extDirPath+"\\scripts\\windows";
+
+				vscode.window.showInformationMessage("Compiling");
+
+				// Send data to terminal to compile the current active file
+
+				term.sendText(extDir+"\\cmdCompile.bat"+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+extDir+"\\comm.txt",true);
+
+				// Appropriate event listeners to carry on testcase run tanks and finally display the result and dispose the listener function
+
+				let dis= vscode.window.onDidCloseTerminal(t => {
+
+					totalTerminals+=1;
+
+					if (t.exitStatus.code === 0 && totalTerminals===2) {
+
+						let runTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Run",shellPath:"C:\\Windows\\System32\\cmd.exe",hideFromUser:true});
+
+						runTerminal.show();
+
+						runTerminal.sendText("@echo off",true);
+
+						for(let i=0;i<noFiles;i++){
+
+							runTerminal.sendText(extDir+"\\cmdRun.bat"+" "+fileNameWithoutExtension+" "+testcaseDir+"\\"+fileList[i]+" "+testcaseDir+"\\"+fileList[i+noFiles]+" "+workspace_path+"\\testcases\\result.txt"+" "+extDir+"\\comm.txt"+" "+(i+1)+" "+timeLimit+" && ",false);
+
+						}
+						runTerminal.sendText("exit 0",true);
+						setTimeout(() => {
+							if(runTerminal){
+
+								centralTerminal.sendText("@echo off && type "+workspace_path+"\\testcases\\result.txt"+" >> "+extDir+"\\comm.txt",true);
+								// Dispose the terminal and associated Resources
+								runTerminal.dispose();
+							}
+						},60000);
+
+					} else {
+
+						let resultTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Result",shellPath:"C:\\Windows\\System32\\cmd.exe",hideFromUser:true});
+
+						resultTerminal.sendText("CLS && type"+" "+extDir+"\\comm.txt",true);
+
+						resultTerminal.show();
+
+						dis.dispose();
+
+						centralTerminal.dispose();
+					} 
+				});
+			} else if(vscode.workspace.getConfiguration().get('codetowin').terminal==="bash") {
+				// A central terminal
+
+				let centralTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Central Terminal",shellPath:"/bin/bash",hideFromUser:true});
+
+				// Create the first background terminal for Compiling the file
+
+				let term=vscode.window.createTerminal({cwd:workspace_path,name:"Compile File",shellPath:"/bin/bash",hideFromUser:true});
+
+				// extDir stores the uri to scripts folder witin the extension folder
+
+				let extDir=extDirPath+"\\scripts\\bashtype";
 
 				vscode.window.showInformationMessage("Compiling");
 
