@@ -25,7 +25,7 @@ function countProperties(obj) {
 // Scrapper Code. Works only for CodeForces Currently
 async function scrapper(workspace_path,contest,ext){
 
-	let infoArr=[]; // An Array to keep the details of the problem
+	let infoArr=[]; // An Array to keep the details of the problems
 
 	const browser= await pptr.launch();
 	const page= await browser.newPage();
@@ -102,26 +102,31 @@ async function scrapper(workspace_path,contest,ext){
 
 		// Create solution File in the workspace directory
 		if(ext)
-			fs.writeFile((workspace_path+"/"+infoArr[i].problem+ext),"// Code Here",err => {console.log(err)});
+			fs.writeFile(path.join(workspace_path,infoArr[i].problem+ext),"// Code Here",err => {console.log(err)});
 
 		// Create Directory inside testcases folder for each problem
 
-		fs.mkdir(workspace_path+'/testcases/'+infoArr[i].problem,err =>{console.log(err)});
+		fs.mkdir(path.join(workspace_path,'testcases',infoArr[i].problem),err =>{console.log(err)});
 		
 		// Base Path where to create the files
 
-		let inPath=workspace_path+'/testcases/'+infoArr[i].problem+"/";
+		let inPath=path.join(workspace_path,'testcases',infoArr[i].problem);
+		let conPath=path.join(workspace_path,'testcases','constraints');
+
+		// Creating constraint files
+
+		fs.writeFile(path.join(conPath,infoArr[i].problem+".txt"),infoArr[i].timeLimit,err => { console.log(err); });
 
 		// Creating testcase input (.txt) files for Problem (i+1)
 
 		for(let j=0;j<infoArr[i].input.length;j++){
-			fs.writeFile((inPath+infoArr[i].problem+"_input_"+(j+1)+".txt"),(infoArr[i].input)[j],err=>{ console.log(err)});
+			fs.writeFile(path.join(inPath,infoArr[i].problem+"_input_"+(j+1)+".txt"),(infoArr[i].input)[j],err=>{ console.log(err)});
 		}
 
 		// Creating testcase output (.txt) files for Problem (i+1)  
 		
 		for(let j=0;j<infoArr[i].output.length;j++){
-			fs.writeFile((inPath+infoArr[i].problem+"_output_"+(j+1)+".txt"),(infoArr[i].output)[j],err => console.log(err));
+			fs.writeFile(path.join(inPath,infoArr[i].problem+"_output_"+(j+1)+".txt"),(infoArr[i].output)[j],err => console.log(err));
 		}
 	}
 
@@ -149,13 +154,19 @@ function activate(context) {
 
 		// Converting vscode.Uri to humanreadable path in string
 
+		if(workspace_uri_path == undefined){
+			vscode.window.showErrorMessage("No Active Workspace/Folder");
+			return;
+		}
+
 		let workspace_path=workspace_uri_path.fsPath;
 
 		// Create the testcase directory wihin your workspace Folder (Can use either vscode.workspace.fs or generic node fs)
 		// Also create the rsult.txt file where your program output will be saved.
 
-		fs.mkdir((workspace_path+"/testcases"),(err)=>{console.log(err)});
-		fs.writeFile((workspace_path+"/testcases/result.txt"),"Empty Result File",err => console.log(err));
+		fs.mkdir(path.join(workspace_path,"testcases"),(err)=>{console.log(err)});
+		fs.mkdir(path.join(workspace_path,"testcases","constraints"),err => {console.log(err)});
+		fs.writeFile(path.join(workspace_path,"testcases","result.txt"),"Empty Result File",err => console.log(err));
 
 		// For Now, Extension will work only for CodeForces
 
@@ -194,7 +205,7 @@ function activate(context) {
 
 		// The code you place here will be executed every time your command is executed
 
-		// Re-initialize totalTerminal to 0
+		// Re-initialize totalTerminal to 1
 
 		totalTerminals=1;
 
@@ -217,68 +228,73 @@ function activate(context) {
 
 		if(activeSourceCode){
 
+			if(activeSourceCode.document.isDirty){
+				let r = await activeSourceCode.document.save();
+				if(r == false){
+					vscode.window.showErrorMessage("File Could Not Be Saved");
+					return;
+				}
+			}
+
 			// Get the extension of the active document
 
 			let fileExt=activeSourceCode.document.languageId;
 
+			// Get the file obj
+
+			let file_obj=path.parse(activeSourceCode.document.fileName);
+
 			// Get the fileNameWithExtension of the active document
 
-			let fileNameWithExtension=activeSourceCode.document.fileName;
-			fileNameWithExtension=fileNameWithExtension.slice(workspace_path.length+1);
+			let fileNameWithExtension=file_obj.base;
 
 			// Get the fileNameWithoutExtension of the active document
 
-			let fileNameWithoutExtension=fileNameWithExtension.slice(0,fileNameWithExtension.indexOf('.'));
+			let fileNameWithoutExtension=file_obj.name;
 
 			// Get the timeLimit associated with this question
 
-			let timeLimit;
+			let timeLimit=Number(fs.readFileSync(path.join(workspace_path,'testcases','constraints',fileNameWithoutExtension+'.txt')));
 
-			for(let i=0;i<global_infoArr.length;i++){
-				if(global_infoArr[i].problem === fileNameWithoutExtension){
-					timeLimit=global_infoArr[i].timeLimit;
-					break;
-				}
-			}
+			// testcaseDir keeps the path to locationOfOpenedFolder/testcases/fileName (Platform Specific)
 
-			// testcaseDir keeps the path to locationOfOpenedFolder\\testcases\\fileName
-
-			let testcaseDir=path.join(workspace_path,"/testcases/",fileNameWithoutExtension);
-			console.log(testcaseDir);
+			let testcaseDir=path.join(workspace_path,"testcases",fileNameWithoutExtension);
 
 			// fileList keeps an array of filenames in testcaseDir
 
-			let fileList=fs.readdirSync((workspace_path+"\\testcases\\"+fileNameWithoutExtension));
+			let fileList=fs.readdirSync(testcaseDir);
 
 			// noFiles = No of files(Input+Output=1 File) in fileList
 
 			let noFiles=fileList.length/2;
 
 			let extDirPath=vscode.extensions.getExtension('Arpan.codetowin').extensionUri.fsPath
-
-			console.log(path.normalize('C:\\Windows\\System32\\cmd.exe'));
 			
 			// Check what terminal it is: cmd / powershell / bash
 
 			if(vscode.workspace.getConfiguration().get('codetowin').terminal==="cmd"){
 
+				//Location of cmd.exe
+
+				let cmdLocation=path.normalize("C://Windows//System32//cmd.exe");
+
 				// A central terminal
 
-				let centralTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Central Terminal",shellPath:"C:\\Windows\\System32\\cmd.exe",hideFromUser:true});
+				let centralTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Central Terminal",shellPath:cmdLocation,hideFromUser:true});
 
 				// Create the first background terminal for Compiling the file
 
-				let term=vscode.window.createTerminal({cwd:workspace_path,name:"Compile File",shellPath:path.normalize('C:\\Windows\\System32\\cmd.exe'),hideFromUser:true});
+				let term=vscode.window.createTerminal({cwd:workspace_path,name:"Compile File",shellPath:cmdLocation,hideFromUser:true});
 
 				// extDir stores the uri to scripts folder witin the extension folder
 
-				let extDir=extDirPath+"\\scripts\\windows";
+				let extDir=path.join(extDirPath,"/scripts/windows");
 
 				vscode.window.showInformationMessage("Compiling");
 
 				// Send data to terminal to compile the current active file
 
-				term.sendText(extDir+"\\cmdCompile.bat"+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+extDir+"\\comm.txt",true);
+				term.sendText(path.join(extDir+"/cmdCompile.bat")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt"),true);
 
 				// Appropriate event listeners to carry on testcase run tanks and finally display the result and dispose the listener function
 
@@ -288,7 +304,7 @@ function activate(context) {
 
 					if (t.exitStatus.code === 0 && totalTerminals===2) {
 
-						let runTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Run",shellPath:"C:\\Windows\\System32\\cmd.exe",hideFromUser:true});
+						let runTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Run",shellPath:cmdLocation,hideFromUser:true});
 
 						runTerminal.show();
 
@@ -296,14 +312,14 @@ function activate(context) {
 
 						for(let i=0;i<noFiles;i++){
 
-							runTerminal.sendText(extDir+"\\cmdRun.bat"+" "+fileNameWithoutExtension+" "+testcaseDir+"\\"+fileList[i]+" "+testcaseDir+"\\"+fileList[i+noFiles]+" "+workspace_path+"\\testcases\\result.txt"+" "+extDir+"\\comm.txt"+" "+(i+1)+" "+timeLimit+" && ",false);
+							runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" && ",false);
 
 						}
 						runTerminal.sendText("exit 0",true);
 						setTimeout(() => {
 							if(runTerminal){
 
-								centralTerminal.sendText("@echo off && type "+workspace_path+"\\testcases\\result.txt"+" >> "+extDir+"\\comm.txt",true);
+								centralTerminal.sendText("@echo off && type "+path.join(workspace_path,"testcases","result.txt")+" >> "+path.join(extDir,"/comm.txt"),true);
 								// Dispose the terminal and associated Resources
 								runTerminal.dispose();
 							}
@@ -311,9 +327,9 @@ function activate(context) {
 
 					} else {
 
-						let resultTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Result",shellPath:"C:\\Windows\\System32\\cmd.exe",hideFromUser:true});
+						let resultTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Result",shellPath:cmdLocation,hideFromUser:true});
 
-						resultTerminal.sendText("CLS && type"+" "+extDir+"\\comm.txt",true);
+						resultTerminal.sendText("CLS && type"+" "+path.join(extDir+"/comm.txt"),true);
 
 						resultTerminal.show();
 
@@ -323,23 +339,26 @@ function activate(context) {
 					} 
 				});
 			} else if(vscode.workspace.getConfiguration().get('codetowin').terminal==="bash") {
-				// A central terminal
 
-				let centralTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Central Terminal",shellPath:"/bin/bash",hideFromUser:true});
+				let bashLocation=path.normalize("/bin/bash");
+
+				let centralTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Central Terminal",shellPath:bashLocation,hideFromUser:true});
 
 				// Create the first background terminal for Compiling the file
 
-				let term=vscode.window.createTerminal({cwd:workspace_path,name:"Compile File",shellPath:"/bin/bash",hideFromUser:true});
+				let term=vscode.window.createTerminal({cwd:workspace_path,name:"Compile File",shellPath:bashLocation,hideFromUser:true});
+
+				term.show(true);
 
 				// extDir stores the uri to scripts folder witin the extension folder
 
-				let extDir=extDirPath+"\\scripts\\bashtype";
+				let extDir=path.join(extDirPath,"/scripts/bashtype");
 
 				vscode.window.showInformationMessage("Compiling");
 
 				// Send data to terminal to compile the current active file
 
-				term.sendText(extDir+"\\cmdCompile.bat"+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+extDir+"\\comm.txt",true);
+				term.sendText("source "+path.join(extDir,"/compile.sh")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt"),true);
 
 				// Appropriate event listeners to carry on testcase run tanks and finally display the result and dispose the listener function
 
@@ -349,22 +368,24 @@ function activate(context) {
 
 					if (t.exitStatus.code === 0 && totalTerminals===2) {
 
-						let runTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Run",shellPath:"C:\\Windows\\System32\\cmd.exe",hideFromUser:true});
+						let runTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Run",shellPath:bashLocation,hideFromUser:true});
 
 						runTerminal.show();
 
-						runTerminal.sendText("@echo off",true);
+						// runTerminal.sendText("@echo off",true);
 
 						for(let i=0;i<noFiles;i++){
 
-							runTerminal.sendText(extDir+"\\cmdRun.bat"+" "+fileNameWithoutExtension+" "+testcaseDir+"\\"+fileList[i]+" "+testcaseDir+"\\"+fileList[i+noFiles]+" "+workspace_path+"\\testcases\\result.txt"+" "+extDir+"\\comm.txt"+" "+(i+1)+" "+timeLimit+" && ",false);
+							runTerminal.sendText("source "+path.join(extDir,"/run.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" ; ",false);
 
 						}
+						runTerminal.sendText("cp "+path.join(extDirPath,'scripts','bashtype','comm.txt')+" "+path.join(workspace_path,'testcases','result.txt') + ';',false);
 						runTerminal.sendText("exit 0",true);
+						// runTerminal.sendText("echo 'done'",true);
 						setTimeout(() => {
 							if(runTerminal){
 
-								centralTerminal.sendText("@echo off && type "+workspace_path+"\\testcases\\result.txt"+" >> "+extDir+"\\comm.txt",true);
+								centralTerminal.sendText("cat "+path.join(workspace_path,"/testcases/result.txt")+" >> "+path.join(extDir,"/comm.txt"),true);
 								// Dispose the terminal and associated Resources
 								runTerminal.dispose();
 							}
@@ -372,9 +393,9 @@ function activate(context) {
 
 					} else {
 
-						let resultTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Result",shellPath:"C:\\Windows\\System32\\cmd.exe",hideFromUser:true});
+						let resultTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Result",shellPath:bashLocation,hideFromUser:true});
 
-						resultTerminal.sendText("CLS && type"+" "+extDir+"\\comm.txt",true);
+						resultTerminal.sendText("clear ; cat"+" "+path.join(extDir+"/comm.txt"),true);
 
 						resultTerminal.show();
 
@@ -387,7 +408,50 @@ function activate(context) {
 		}
 	});
 
-	context.subscriptions.push(disposable,disposable_2);
+	let disposable_3=vscode.commands.registerCommand('codetowin.compileAndRun',()=>{
+
+		let workspace_uri=vscode.workspace.workspaceFolders[0].uri;
+		if(workspace_uri){
+			let workspace_path=workspace_uri.fsPath;
+			let activeSourceCode=vscode.window.activeTextEditor;
+			if(activeSourceCode){
+				let fileExt=activeSourceCode.document.languageId;
+				let file_obj=path.parse(activeSourceCode.document.fileName);
+				let fileNameWithExtension=file_obj.base;
+				let fileNameWithoutExtension=file_obj.name;
+
+				// make a new terminal
+				let platform=vscode.workspace.getConfiguration().get('codetowin').terminal;
+				if(platform==="cmd"){
+					let cmdLocation=path.normalize("C://Windows//System32//cmd.exe");
+					let terminal=vscode.window.createTerminal({
+						cwd:workspace_path,
+						name:"Compile And Run",
+						shellPath:cmdLocation
+					});
+					terminal.show(true);
+					if(fileExt==='cpp'){
+						let compileText='g++ -g -w -std=c++14 '+fileNameWithExtension+" -o "+fileNameWithoutExtension+" && "+fileNameWithoutExtension+" && "+"echo";
+						terminal.sendText(compileText,true);
+					}
+				} else {
+					let bashLocation=path.normalize("/bin/bash");
+					let terminal=vscode.window.createTerminal({
+						cwd:workspace_path,
+						name:"Compile And Run",
+						shellPath:bashLocation
+					});
+					terminal.show(true);
+					if(fileExt==='cpp'){
+						let compileText='g++ -g -w -std=c++14 '+fileNameWithExtension+" -o "+fileNameWithoutExtension+" && "+"./"+fileNameWithoutExtension+" && "+"echo";
+						terminal.sendText(compileText,true);
+					}
+				}
+			}
+		}
+	});
+
+	context.subscriptions.push(disposable,disposable_2,disposable_3);
 	// context.subscriptions.push(disposable_2);
 }
 exports.activate = activate;

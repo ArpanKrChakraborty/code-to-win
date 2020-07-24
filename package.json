@@ -11,7 +11,9 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:codetowin.newContest","onCommand:codetowin.compileRun"
+		"onCommand:codetowin.newContest",
+		"onCommand:codetowin.compileRun",
+		"onCommand:codetowin.compileAndRun"
 	],
 	"main": "./extension.js",
 	"contributes": {
@@ -23,25 +25,33 @@
 			},
 			{
 				"command": "codetowin.compileRun",
-				"title": "Compile And Run",
-				"category": "Code to Win"
+				"title": "Compile And Run Against Parsed Test Cases",
+				"category": "Code To Win"
+			},
+			{
+				"command": "codetowin.compileAndRun",
+				"title": "Compile And Run (Interactive Input)",
+				"category": "Code To Win"
 			}
 		],
-		"configuration":{
+		"configuration": {
 			"title": "codetowin",
 			"properties": {
-				"codetowin.terminal":{
-					"type":"string",
-					"default":"cmd",
-					"enum":["cmd","bash"],
-					"enumDescriptions":[
+				"codetowin.terminal": {
+					"type": "string",
+					"default": "cmd",
+					"enum": [
+						"cmd",
+						"bash"
+					],
+					"enumDescriptions": [
 						"For Windows Operating System",
 						"For Linux and MacOS"
 					]
 				},
-				"codetowin.compilerPath":{
-					"type":"string",
-					"default":"Location to compiler directory's bin folder",
+				"codetowin.compilerPath": {
+					"type": "string",
+					"default": "Location to compiler directory's bin folder",
 					"format": "uri"
 				}
 			}
