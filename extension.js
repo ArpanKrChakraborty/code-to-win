@@ -294,9 +294,9 @@ function activate(context) {
 
 				// Send data to terminal to compile the current active file
 
-				term.sendText(path.join(extDir+"/cmdCompile.bat")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt"),true);
+				term.sendText(path.join(extDir,"cmdCompile.bat")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt"),true);
 
-				// Appropriate event listeners to carry on testcase run tanks and finally display the result and dispose the listener function
+				// Appropriate event listeners to carry on testcase run tasks and finally display the result and dispose the listener function
 
 				let dis= vscode.window.onDidCloseTerminal(t => {
 
@@ -312,7 +312,7 @@ function activate(context) {
 
 						for(let i=0;i<noFiles;i++){
 
-							runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" && ",false);
+							runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" & ",false);
 
 						}
 						runTerminal.sendText("exit 0",true);

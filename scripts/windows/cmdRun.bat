@@ -8,8 +8,9 @@ set output=%3
 set result=%4
 set finalResult=%5
 set no=%6
-set verdict=WA (Wrong Answer)
 set timeLimit=%7
+set "escapeb=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^="
+set "escapec=^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>"
 if %no%==1 echo Compilation Successful! > %finalResult% && CLS && echo Running Against Test-Cases: && echo (Process Will be halted automatically after 1 min to avoid infinte loop execution)
 set start=%time%
 %fileNameNoExtension% < %input% > %result% 
@@ -30,7 +31,10 @@ if 1%ms% lss 100 set ms=0%ms%
 
 :: Mission accomplished
 set /a totalsecs = %hours%*3600 + %mins%*60 + %secs%
-if %totalsecs%.%ms% GTR %timeLimit% set verdict=TLE (Time Limit Exceeded)
 fc /A %result% %output% 
-if %errorlevel%==0 echo Test Case %no%: >> %finalResult% &&  echo Input: >> %finalResult% && type %input% >> %finalResult%  && echo Output: >> %finalResult% && type %output% >> %finalResult% &&  echo Answer: >> %finalResult% && type %result% >> %finalResult% &&  echo. >> %finalResult% && echo Verdict:AC (Accepted) >> %finalResult% && echo Process Run Time: %totalsecs%.%ms% secs >> %finalResult% && echo. >> %finalResult%
-if %errorlevel%==1 echo Test Case %no%: >> %finalResult% &&  echo Input: >> %finalResult% && type %input% >> %finalResult%  && echo Output: >> %finalResult% && type %output% >> %finalResult% &&  echo Answer: >> %finalResult% && type %result% >> %finalResult% && echo. >> %finalResult% && echo Verdict:%verdict% >> %finalResult% && echo Process Run Time: %totalsecs%.%ms% secs >> %finalResult% && echo. >> %finalResult%
+if %errorlevel%==0 set verdict=AC (Accepted) & set DIFFACTIVE=0
+if %errorlevel%==1 set verdict=WA (Wrong Answer) & set DIFFACTIVE=1
+if %totalsecs% GTR %timeLimit% set verdict=TLE (Time Limit Exceeded)
+echo %escapec% >> %finalResult% & echo Test Case %no%: >> %finalResult% & echo %escapeb% >> %finalResult% & echo Input: >> %finalResult% & type %input% >> %finalResult% & echo. >> %finalResult% & echo %escapeb% >> %finalResult% & echo Expected Output: >> %finalResult% & type %output% >> %finalResult%  & echo. >> %finalResult% & echo %escapeb% >> %finalResult%  &  echo Your Answer: >> %finalResult% & type %result% >> %finalResult% & echo. >> %finalResult% &  echo %escapeb% >> %finalResult%  & echo Verdict:%verdict% >> %finalResult% & echo Process Run Time: %totalsecs%.%ms% secs >> %finalResult% 
+if %DIFFACTIVE%==1 echo %escapeb% >> %finalResult% & echo Difference (Your Answer Vs Expected Output): >> %finalResult% & fc /A %result% %output% >> %finalResult% & echo %escapec% >> %finalResult% & echo. >> %finalResult%
+if %DIFFACTIVE%==0 echo %escapec% >> %finalResult% & echo. >> %finalResult%

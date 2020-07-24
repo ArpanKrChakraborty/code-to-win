@@ -51,7 +51,7 @@ else
     verdict="WA (Wrong Answer)"
     DIFFACTIVE=1
 fi
-echo -e $c >> $finalResult && echo "Test Case $no:" >> $finalResult && echo -e $b >> $finalResult && echo "Input:" >> $finalResult && cat $input >> $finalResult && echo -e $b >> $finalResult && echo "Expected Output:" >> $finalResult && cat $output >> $finalResult && echo -e $b >> $finalResult && echo "Answer:" >> $finalResult && cat $result >> $finalResult && echo -e $b >> $finalResult && echo "Verdict:$verdict" >> $finalResult && echo "Process Run Time: $t secs" >> $finalResult;
+echo -e $c >> $finalResult && echo "Test Case $no:" >> $finalResult && echo -e $b >> $finalResult && echo "Input:" >> $finalResult && cat $input >> $finalResult && echo -e $b >> $finalResult && echo "Expected Output:" >> $finalResult && cat $output >> $finalResult && echo -e $b >> $finalResult && echo "Your Answer:" >> $finalResult && cat $result >> $finalResult && echo -e $b >> $finalResult && echo "Verdict:$verdict" >> $finalResult && echo "Process Run Time: $t secs" >> $finalResult;
 if [ $DIFFACTIVE == 1 ]
 then
     echo -e $b >> $finalResult ; echo "Difference (Answer Vs Expected Output)" >> $finalResult ; diff -y -b $result $output >> $finalResult ; echo -e $c >> $finalResult
