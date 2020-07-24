@@ -5,6 +5,7 @@ const pptr=require('puppeteer');
 const { time, info } = require('console');
 const fs = require('fs');
 const { exit } = require('process');
+const path = require('path');
 
 let global_infoArr=[],contest,lang,totalTerminals=0;
 
@@ -242,7 +243,8 @@ function activate(context) {
 
 			// testcaseDir keeps the path to locationOfOpenedFolder\\testcases\\fileName
 
-			let testcaseDir=(workspace_path+"\\testcases\\"+fileNameWithoutExtension);
+			let testcaseDir=path.join(workspace_path,"/testcases/",fileNameWithoutExtension);
+			console.log(testcaseDir);
 
 			// fileList keeps an array of filenames in testcaseDir
 
@@ -253,6 +255,8 @@ function activate(context) {
 			let noFiles=fileList.length/2;
 
 			let extDirPath=vscode.extensions.getExtension('Arpan.codetowin').extensionUri.fsPath
+
+			console.log(path.normalize('C:\\Windows\\System32\\cmd.exe'));
 			
 			// Check what terminal it is: cmd / powershell / bash
 
@@ -264,7 +268,7 @@ function activate(context) {
 
 				// Create the first background terminal for Compiling the file
 
-				let term=vscode.window.createTerminal({cwd:workspace_path,name:"Compile File",shellPath:"C:\\Windows\\System32\\cmd.exe",hideFromUser:true});
+				let term=vscode.window.createTerminal({cwd:workspace_path,name:"Compile File",shellPath:path.normalize('C:\\Windows\\System32\\cmd.exe'),hideFromUser:true});
 
 				// extDir stores the uri to scripts folder witin the extension folder
 
