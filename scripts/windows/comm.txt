@@ -3,39 +3,68 @@ Compilation Successful!
 Test Case 1:  
 =================================================================  
 Input:  
+4
+4
+1 2 4 2
+2
+5 3
 3
-7 10 2
+1 3 1
+3
+0 0 0
   
 =================================================================  
 Expected Output:  
-17
-  
+aeren
+ari
+arousal
+around
+ari
+monogon
+monogamy
+monthly
+kevinvu
+kuroni
+kurioni
+korone
+anton
+loves
+adhoc
+problems  
 =================================================================   
 Your Answer:  
-17
+a
+aa
+aaaa
+aaaa
+aa
+aaaaa
+aaaaa
+aaa
+a
+aaa
+aaa
+a
+a
+b
+a
+b
   
 =================================================================   
-Verdict:AC (Accepted)   
-Process Run Time: 0.09 secs  
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  
- 
->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  
-Test Case 2:  
+Verdict:WA (Wrong Answer)   
+Process Run Time: 0.04 secs  
 =================================================================  
-Input:  
-1
-4
-  
-=================================================================  
-Expected Output:  
-4
-  
-=================================================================   
-Your Answer:  
-4
-  
-=================================================================   
-Verdict:AC (Accepted)   
-Process Run Time: 0.02 secs  
+Difference (Your Answer Vs Expected Output):  
+Comparing files D:\CODE\CODEFORCE\ROUND_659_DIV_2\TESTCASES\result.txt and D:\CODE\CODEFORCE\ROUND_659_DIV_2\TESTCASES\A\A_OUTPUT_1.TXT
+***** D:\CODE\CODEFORCE\ROUND_659_DIV_2\TESTCASES\result.txt
+a
+...
+b
+***** D:\CODE\CODEFORCE\ROUND_659_DIV_2\TESTCASES\A\A_OUTPUT_1.TXT
+aeren
+...
+problems
+*****
+
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  
  
