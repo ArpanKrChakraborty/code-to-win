@@ -315,6 +315,7 @@ function activate(context) {
 							runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" & ",false);
 
 						}
+						runTerminal.sendText("copy /Y"+path.join(extDir,"comm.txt")+" "+path.join(workspace_path,"testcases","result.txt")+" &",false);
 						runTerminal.sendText("exit 0",true);
 						setTimeout(() => {
 							if(runTerminal){
