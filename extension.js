@@ -21,9 +21,129 @@ let global_infoArr=[],contest,lang,totalTerminals=0;
 function countProperties(obj) {
     return Object.keys(obj).length;
 }
+async function ccscraper(workspace_path,contest,ext){
+	let infoArr=[]; // An Array to keep the details of the problems
 
-// Scrapper Code. Works only for CodeForces Currently
-async function scrapper(workspace_path,contest,ext){
+	const browser= await pptr.launch();
+	const page= await browser.newPage();
+
+	await page.tracing.start({
+		path:'trace.json',
+		categories:['devtools.timeline']
+	});
+
+	//Contest Site
+	await page.goto(contest);
+
+	// execute standard javascript in the context of the page.
+
+	let questionsObjectList = await page.$$eval('.problem-table .dataTable tbody tr td:nth-of-type(2)', problems => { return problems.map(x => (x.textContent).trim())});
+	for(var i=0;i<countProperties(questionsObjectList);i++){
+		
+		// Problem X Page
+		let newURL=contest+"/problems/"+questionsObjectList[i];
+		await page.goto(newURL);
+
+		let info,start,info_i,timeLimit,memoryLimit,input=[],output=[];
+
+		// Getting the time limit for the problem
+		
+		let problem_info=info=await page.$$eval('.problem-info p',x => {
+			return x.map( y => (y.innerText).trim());
+		});
+
+		let problem_info_l=countProperties(problem_info);
+
+		if(problem_info_l===7){
+			info=await page.$$eval('.problem-info p:nth-of-type(5) span',x => {
+				return x.map( y => (y.innerText).trim());
+			});
+		} else {
+			info=await page.$$eval('.problem-info p:nth-of-type(4) span',x => {
+				return x.map( y => (y.innerText).trim());
+			});
+		}
+
+		for(info_i=0;info[0][info_i]!=' ';info_i++);
+		timeLimit=Number(info[0].slice(0,info_i));
+
+		// Getting the memory Limit for the problem
+
+		// info=await page.$$eval('.memory-limit',x => {
+		// 	return x.map( y => y.innerText);
+		// });
+		// start=info[0].indexOf('test'),info_i;
+		// start=start+4;
+		// for(info_i=start;info[0][info_i]!=' ';info_i++);
+		// memoryLimit=Number(info[0].slice(start,info_i));
+
+		// Getting Input
+
+		input=await page.$$eval('.problem-statement pre:nth-of-type(1)',x => {
+			return x.map( y => y.innerText);
+		});
+
+		// Getting Output
+
+		output=await page.$$eval('.problem-statement pre:nth-of-type(2)', x => {
+			return x.map(y=>y.innerText);
+		});
+
+	// Pushing the gathered data about a problem to a Array
+
+		infoArr.push({
+			problem:questionsObjectList[i],
+			timeLimit:timeLimit,
+			memlimit:memoryLimit,
+			input:input,
+			output:output
+		});
+
+		global_infoArr=infoArr;
+	}
+
+	await page.tracing.stop();
+	await browser.close();
+
+	for(let i=0;i<infoArr.length;i++){
+
+		// Create solution File in the workspace directory
+		if(ext)
+			fs.writeFile(path.join(workspace_path,infoArr[i].problem+ext),"// Code Here",err => {console.log(err)});
+
+		// Create Directory inside testcases folder for each problem
+
+		fs.mkdir(path.join(workspace_path,'testcases',infoArr[i].problem),err =>{console.log(err)});
+		
+		// Base Path where to create the files
+
+		let inPath=path.join(workspace_path,'testcases',infoArr[i].problem);
+		let conPath=path.join(workspace_path,'testcases','constraints');
+
+		// Creating constraint files
+
+		fs.writeFile(path.join(conPath,infoArr[i].problem+".txt"),infoArr[i].timeLimit,err => { console.log(err); });
+
+		// Creating testcase input (.txt) files for Problem (i+1)
+
+		for(let j=0;j<infoArr[i].input.length;j++){
+			fs.writeFile(path.join(inPath,infoArr[i].problem+"_input_"+(j+1)+".txt"),(infoArr[i].input)[j],err=>{ console.log(err)});
+		}
+
+		// Creating testcase output (.txt) files for Problem (i+1)  
+		
+		for(let j=0;j<infoArr[i].output.length;j++){
+			fs.writeFile(path.join(inPath,infoArr[i].problem+"_output_"+(j+1)+".txt"),(infoArr[i].output)[j],err => console.log(err));
+		}
+	}
+
+	global_infoArr=infoArr;
+
+	// console.log(global_infoArr);
+
+}
+
+async function cfscrapper(workspace_path,contest,ext){
 
 	let infoArr=[]; // An Array to keep the details of the problems
 
@@ -146,8 +266,6 @@ function activate(context) {
 	let disposable = vscode.commands.registerCommand('codetowin.newContest',async function () {
 		// The code you place here will be executed every time your command is executed
 
-		vscode.window.showInformationMessage("Initializing....")
-
 		// Path to my VSCode Opened folder/Workspace in vscode.Uri
 
 		let workspace_uri_path=vscode.workspace.workspaceFolders[0].uri;
@@ -175,6 +293,10 @@ function activate(context) {
 		let inputBoxOpt={placeHolder:"Contest URL", prompt:"Enter the Contest Dashboard URL",ignoreFocusOut:true};
 		await vscode.window.showInputBox(inputBoxOpt).then(result => { contest=result });
 
+		if(contest.length===0 || contest===undefined){
+			return;
+		}
+
 		// Language in which your solution files will be in:
 
 		let arr=["Custom","C","C++","Java","Python"];
@@ -183,6 +305,10 @@ function activate(context) {
 
 		await vscode.window.showQuickPick(arr,{ignoreFocusOut:true, placeHolder:"Select a Language in which your will write your solution",onDidSelectItem: choice =>{ lang = choice}});
 
+		if(lang===undefined){
+			lang="Custom";
+		}
+
 		let ext;
 		if(lang==="Custom")  ext=undefined;
 		else if(lang === "C") ext=".c";
@@ -190,12 +316,18 @@ function activate(context) {
 		else if(lang === "Python") ext=".py";
 		else if(lang === "Java") ext=".java";
 
-		vscode.window.showInformationMessage("Parsing Test-Cases and bulding required files");
+		// vscode.window.showInformationMessage("Parsing Test-Cases and bulding required files");
 
 		// ----- Scraping & generating I/O files (await is using to introduce delay while it Scraps for data) ------
 
-		await scrapper(workspace_path,contest,ext);
-
+		// Progress notification
+		await vscode.window.withProgress({location:vscode.ProgressLocation.Notification,title:"Parsing Test-Cases and bulding required files"},async () =>{
+			if(contest.indexOf("codechef.com")==-1){
+				await cfscrapper(workspace_path,contest,ext);
+			} else {
+				await ccscraper(workspace_path,contest,ext);
+			}
+		});
 		//console.log(global_infoArr);
 
 		vscode.window.showInformationMessage('All Ready To GO!');
