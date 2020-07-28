@@ -236,6 +236,9 @@ function activate(context) {
 				}
 			}
 
+			// Current Operating System
+			var isWin=process.platform === "win32";
+
 			// Get the extension of the active document
 
 			let fileExt=activeSourceCode.document.languageId;
@@ -268,11 +271,14 @@ function activate(context) {
 
 			let noFiles=fileList.length/2;
 
-			let extDirPath=vscode.extensions.getExtension('Arpan.codetowin').extensionUri.fsPath
-			
+			let extDirPath=vscode.extensions.getExtension('Arpan.codetowin').extensionUri.fsPath;
+
+			let cpp_version=vscode.workspace.getConfiguration().get('codetowin').CppVersion;
+			let c_version=vscode.workspace.getConfiguration().get('codetowin').cVersion;
+
 			// Check what terminal it is: cmd / powershell / bash
 
-			if(vscode.workspace.getConfiguration().get('codetowin').terminal==="cmd"){
+			if(isWin){
 
 				//Location of cmd.exe
 
@@ -294,7 +300,7 @@ function activate(context) {
 
 				// Send data to terminal to compile the current active file
 
-				term.sendText(path.join(extDir,"cmdCompile.bat")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt"),true);
+				term.sendText(path.join(extDir,"cmdCompile.bat")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt")+" "+cpp_version+" "+c_version,true);
 
 				// Appropriate event listeners to carry on testcase run tasks and finally display the result and dispose the listener function
 
@@ -312,10 +318,10 @@ function activate(context) {
 
 						for(let i=0;i<noFiles;i++){
 
-							runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" & ",false);
+							runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" & ",false);
 
 						}
-						runTerminal.sendText("copy /Y"+path.join(extDir,"comm.txt")+" "+path.join(workspace_path,"testcases","result.txt")+" &",false);
+						runTerminal.sendText("type "+path.join(extDir,"comm.txt")+" > "+path.join(workspace_path,"testcases","result.txt")+" &",false);
 						runTerminal.sendText("exit 0",true);
 						setTimeout(() => {
 							if(runTerminal){
@@ -339,7 +345,7 @@ function activate(context) {
 						centralTerminal.dispose();
 					} 
 				});
-			} else if(vscode.workspace.getConfiguration().get('codetowin').terminal==="bash") {
+			} else  {
 
 				let bashLocation=path.normalize("/bin/bash");
 
@@ -359,7 +365,7 @@ function activate(context) {
 
 				// Send data to terminal to compile the current active file
 
-				term.sendText("source "+path.join(extDir,"/compile.sh")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt"),true);
+				term.sendText("source "+path.join(extDir,"/compile.sh")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt")+" "+cpp_version+" "+c_version,true);
 
 				// Appropriate event listeners to carry on testcase run tanks and finally display the result and dispose the listener function
 
@@ -377,7 +383,7 @@ function activate(context) {
 
 						for(let i=0;i<noFiles;i++){
 
-							runTerminal.sendText("source "+path.join(extDir,"/run.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" ; ",false);
+							runTerminal.sendText("source "+path.join(extDir,"/run.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" ; ",false);
 
 						}
 						runTerminal.sendText("cp "+path.join(extDirPath,'scripts','bashtype','comm.txt')+" "+path.join(workspace_path,'testcases','result.txt') + ';',false);

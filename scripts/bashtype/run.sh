@@ -10,11 +10,27 @@ no=$6
 b="\n=================================================================\n"
 c="\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
 timeLimit=$7
+ext=$8
+java="java"
+python="python"
+cpp="cpp"
+normalc="c"
 if [ $no == 1 ] 
 then
     echo "Compilation Successful!" > $finalResult ; clear ; echo -e "Running Against Test-Cases:\n(Process Will be halted automatically after 1 min to avoid infinte loop)"
 fi
+if [ $ext = $c ] 
+then 
 start=$(date +%N) && ./$fileNameNoExtension < $input > $result && end=$(date +%N)
+elif [ $ext = $cpp ]
+then
+start=$(date +%N) && ./$fileNameNoExtension < $input > $result && end=$(date +%N)
+elif [ $ext = $java ] 
+then 
+start=$(date +%N) && java ./$fileNameNoExtension < $input > $result && end=$(date +%N)
+else
+start=$(date +%N) && py ./$fileNameNoExtension < $input > $result && end=$(date +%N)
+fi
 interval=`expr $end - $start`
 divi="scale=0; $interval/1000000000"
 divf="scale=5; $interval/1000000000"

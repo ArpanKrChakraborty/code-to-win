@@ -37,22 +37,25 @@
 		"configuration": {
 			"title": "codetowin",
 			"properties": {
-				"codetowin.terminal": {
+				"codetowin.CppVersion": {
 					"type": "string",
-					"default": "cmd",
-					"enum": [
-						"cmd",
-						"bash"
-					],
-					"enumDescriptions": [
-						"For Windows Operating System",
-						"For Linux and MacOS"
+					"default": "c++11",
+					"enum":[
+						"c++98",
+						"c++03",
+						"c++11",
+						"c++14",
+						"c++17",
+						"c++20"
 					]
 				},
-				"codetowin.compilerPath": {
-					"type": "string",
-					"default": "Location to compiler directory's bin folder",
-					"format": "uri"
+				"codetowin.cVersion":{
+					"type":"string",
+					"default":"c11",
+					"enum":[
+						"c99",
+						"c11"
+					]
 				}
 			}
 		}

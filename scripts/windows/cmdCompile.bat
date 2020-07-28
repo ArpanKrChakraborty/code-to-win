@@ -1,13 +1,15 @@
 @echo off
 :: Compile the file and send appropriate error code
-:: argument list: {fileType Ex:cpp,java,c,py}  {Name of the file with extension} {Name of the file without extension} {comm file location}
+:: argument list: {fileType Ex:cpp,java,c,py}  {Name of the file with extension} {Name of the file without extension} {comm file location} {cpp_version} {c_version}
 set ext=%1
 set fileNameWithExtension= %2
 set fileNameWithoutExtension=%3
 set commfile=%4
+set cppversion=%5
+set cversion=%6
 echo Error: Compile Error (CPE) > %commfile%
-if %ext%==cpp g++ -g -std=c++14 -w %fileNameWithExtension% -o %fileNameWithoutExtension% 2>> %commfile%
-if %ext%==c gcc -std=c11 -w %fileNameWithExtension% -o %fileNameWithoutExtension% 2>> %commfile%
+if %ext%==cpp g++ -g -std=%cppversion% -w %fileNameWithExtension% -o %fileNameWithoutExtension% 2>> %commfile%
+if %ext%==c gcc -std=%cversion% -w %fileNameWithExtension% -o %fileNameWithoutExtension% 2>> %commfile%
 if %ext%==java javac %fileNameWithExtension% 2>> %commfile%
 if %errorlevel%==0  exit 0
 if %errorlevel%==1 exit 1
