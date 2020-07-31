@@ -294,7 +294,7 @@ function activate(context) {
 		let inputBoxOpt={placeHolder:"Contest URL", prompt:"Enter the Contest Dashboard URL",ignoreFocusOut:true};
 		await vscode.window.showInputBox(inputBoxOpt).then(result => { contest=result });
 
-		if(contest.length===0 || contest===undefined){
+		if(contest===undefined || contest.length===0 ){
 			return;
 		}
 

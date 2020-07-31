@@ -1,12 +1,19 @@
 {
 	"name": "codetowin",
 	"displayName": "Code To Win",
-	"description": "project",
-	"publisher": "Arpan",
-	"version": "0.0.1",
+	"description": "Parse Test Cases From Coding Websites, Compile/Run and many other features",
+	"publisher": "Arpan Kumar Chakraborty",
+	"author": {
+		"name": "Arpan Kumar Chakraborty",
+		"email": "arpanrkmgec@gmail.com"
+	},
+	"icon": "./image/CodeToWin.png",
+	"version": "1.0.0",
 	"engines": {
 		"vscode": "^1.46.0"
 	},
+	"license": "SEE LICENSE IN LICENSE.txt",
+	"keywords": ["ctw","codewin"],
 	"categories": [
 		"Other"
 	],
@@ -64,7 +71,28 @@
 					]
 				}
 			}
-		}
+		},
+		"keybindings":[
+			{
+				"command": "codetowin.newContest",
+				"key": "ctrl+n"
+			},
+			{
+				"command": "codetowin.compileRun",
+				"key": "f5",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "codetowin.compileAndRun",
+				"key": "f6",
+				"when": "editorTextFocus"
+			},
+			{
+				"command": "codetowin.addCustomTestCase",
+				"key": "ctrl+t",
+				"when": "editorTextFocus"
+			}
+		]
 	},
 	"scripts": {
 		"lint": "eslint .",
