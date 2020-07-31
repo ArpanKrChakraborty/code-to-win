@@ -2,12 +2,16 @@
 	"name": "codetowin",
 	"displayName": "Code To Win",
 	"description": "Parse Test Cases From Coding Websites, Compile/Run and many other features",
-	"publisher": "Arpan Kumar Chakraborty",
+	"publisher": "Arpan",
+	"icon": "./image/CodeToWin.png",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/ArpanKrChakraborty/code-to-win.git"
+	},
 	"author": {
 		"name": "Arpan Kumar Chakraborty",
 		"email": "arpanrkmgec@gmail.com"
 	},
-	"icon": "./image/CodeToWin.png",
 	"version": "1.0.0",
 	"engines": {
 		"vscode": "^1.46.0"
@@ -48,7 +52,7 @@
 			}
 		],
 		"configuration": {
-			"title": "codetowin",
+			"title": "Code To Win",
 			"properties": {
 				"codetowin.CppVersion": {
 					"type": "string",
