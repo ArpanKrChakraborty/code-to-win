@@ -443,18 +443,19 @@ function activate(context) {
 
 					if (t.exitStatus.code === 0 && totalTerminals===2) {
 
+						vscode.window.showInformationMessage("Compilation Successful! Running against parsed Test Cases");
+
 						let runTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Run",shellPath:cmdLocation,hideFromUser:true});
 
-						runTerminal.show();
+						// runTerminal.show();
 
 						runTerminal.sendText("@echo off",true);
-
+						
 						for(let i=0;i<noFiles;i++){
 
 							runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" & ",false);
 
 						}
-						runTerminal.sendText("type "+path.join(extDir,"comm.txt")+" > "+path.join(workspace_path,"testcases","result.txt")+" &",false);
 						runTerminal.sendText("exit 0",true);
 						setTimeout(() => {
 							if(runTerminal){
@@ -473,7 +474,7 @@ function activate(context) {
 
 						// resultTerminal.show();
 
-						
+						centralTerminal.sendText("type "+path.join(extDir,"comm.txt")+" > "+path.join(workspace_path,"testcases","result.txt"),true);
 						let path1=vscode.Uri.file(path.join(workspace_path,'testcases','result.txt'));
 						await vscode.window.showTextDocument(path1,{preserveFocus:true,viewColumn:vscode.ViewColumn.Beside});
 
@@ -512,9 +513,11 @@ function activate(context) {
 
 					if (t.exitStatus.code === 0 && totalTerminals===2) {
 
+						vscode.window.showInformationMessage("Compilation Successful! Running against parsed Test Cases");
+
 						let runTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Run",shellPath:bashLocation,hideFromUser:true});
 
-						runTerminal.show();
+						// runTerminal.show();
 
 						// runTerminal.sendText("@echo off",true);
 
@@ -523,7 +526,6 @@ function activate(context) {
 							runTerminal.sendText("source "+path.join(extDir,"/run.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" ; ",false);
 
 						}
-						runTerminal.sendText("cp "+path.join(extDirPath,'scripts','bashtype','comm.txt')+" "+path.join(workspace_path,'testcases','result.txt') + ';',false);
 						runTerminal.sendText("exit 0",true);
 						// runTerminal.sendText("echo 'done'",true);
 						setTimeout(() => {
@@ -542,7 +544,7 @@ function activate(context) {
 						// resultTerminal.sendText("clear ; cat"+" "+path.join(extDir,"comm.txt"),true);
 
 						// resultTerminal.show();
-
+						centralTerminal.sendText("cp "+path.join(extDirPath,'scripts','bashtype','comm.txt')+" "+path.join(workspace_path,'testcases','result.txt'),true);
 						let path1=vscode.Uri.file(path.join(workspace_path,'testcases','result.txt'));
 						await vscode.window.showTextDocument(path1,{preserveFocus:true,viewColumn:vscode.ViewColumn.Beside});
 

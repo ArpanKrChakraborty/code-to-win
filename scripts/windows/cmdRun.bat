@@ -1,6 +1,6 @@
 :: Run Batch File
 @echo off
-@setlocal enabledelayedexpansion
+setlocal enabledelayedexpansion
 :: Arguments:fileNameNoExtension, input, output, result, finalResult, No , timeLimit
 set fileNameNoExtension=%1
 set input=%2
@@ -8,45 +8,55 @@ set output=%3
 set result=%4
 set finalResult=%5
 set no=%6
-set timeLimit=%7
+set /A timeLimit=%7
 set ext=%8
-set tlms=%timeLimit% * 1000
+set /A tlms=%timeLimit%*1000
 set "escapeb=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^="
 set "escapec=^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>"
 if %no%==1 echo Compilation Successful^^! > %finalResult% && CLS && echo Running Against Test-Cases: && echo (Process Will be halted automatically after 1 min to avoid infinte loop execution)
+
 if %ext%==cpp (
-    set start=!time!
+    set STARTTIME=!time!
     %fileNameNoExtension% < %input% > %result% 2>&1
-    set end=!time!
+    set ENDTIME=!time!
 )   
-if %ext%==c set start=!time! & %fileNameNoExtension% < %input% > %result% 2>&1 & set end=!time!
-if %ext%==java set start=!time! & java %fileNameNoExtension% < %input% > %result% 2>&1 & set end=!time!
-if %ext%==python set start=!time! & py %fileNameNoExtension%.py < %input% > %result% 2>&1 & set end=!time!
 
-set /A STARTTIME=(1%start:~0,2%-100)*360000 + (1%start:~3,2%-100)*6000 + (1%start:~6,2%-100)*100 + (1%start:~9,2%-100)
-set /A ENDTIME=(1%end:~0,2%-100)*360000 + (1%end:~3,2%-100)*6000 + (1%end:~6,2%-100)*100 + (1%end:~9,2%-100)
+if %ext%==c set STARTTIME=!time! & %fileNameNoExtension% < %input% > %result% 2>&1 & set ENDTIME=!time!
 
-rem calculating the duratyion is easy
-set /A DURATION=%ENDTIME%-%STARTTIME%
+if %ext%==java set STARTTIME=!time! & java %fileNameNoExtension% < %input% > %result% 2>&1 & set ENDTIME=!time!
 
-rem we might have measured the time inbetween days
-if %ENDTIME% LSS %STARTTIME% set set /A DURATION=%STARTTIME%-%ENDTIME%
+if %ext%==python set STARTTIME=!time! & py %fileNameNoExtension%.py < %input% > %result% 2>&1 & set ENDTIME=!time!
 
-rem now break the centiseconds down to hors, minutes, seconds and the remaining centiseconds
-set /A DURATIONCC=%DURATION% * 10
-REM set /A DURATIONM=(%DURATION% - %DURATIONH%*360000) / 6000
-REM set /A DURATIONS=(%DURATION% - %DURATIONH%*360000 - %DURATIONM%*6000) / 100
-REM set /A DURATIONHS=(%DURATION% - %DURATIONH%*360000 - %DURATIONM%*6000 - %DURATIONS%*100)
+rem Get start time:
+for /F "tokens=1-4 delims=:.," %%a in ("%STARTTIME%") do (
+   set /A "start=(((%%a*60)+1%%b %% 100)*60+1%%c %% 100)*100+1%%d %% 100"
+)
 
-rem some formatting
-REM if %DURATIONH% LSS 10 set DURATIONH=0%DURATIONH%
-REM if %DURATIONM% LSS 10 set DURATIONM=0%DURATIONM%
-REM if %DURATIONS% LSS 10 set DURATIONS=0%DURATIONS%
-REM if %DURATIONHS% LSS 10 set DURATIONHS=0%DURATIONHS%
+rem Get end time:
+for /F "tokens=1-4 delims=:.," %%a in ("%ENDTIME%") do (
+   set /A "end=(((%%a*60)+1%%b %% 100)*60+1%%c %% 100)*100+1%%d %% 100"
+)
+
+rem Get elapsed time:
+set /A elapsed=end-start
+
+rem Show elapsed time:
+set /A hh=elapsed/(60*60*100), rest=elapsed%%(60*60*100), mm=rest/(60*100), rest%%=60*100, ss=rest/100, cc=rest%%100
+if %mm% lss 10 set mm=0%mm%
+if %ss% lss 10 set ss=0%ss%
+if %cc% lss 10 set cc=0%cc%
+
+rem total centiseconds
+set /a tcc=%hh%*360000 + %mm%*6000 + %ss%*100 + %cc%
+
+rem total ms
+set /a ms=%tcc%*10
+
 fc /A %result% %output% 
 if %errorlevel%==0 set verdict=AC (Accepted) & set DIFFACTIVE=0
 if %errorlevel%==1 set verdict=WA (Wrong Answer) & set DIFFACTIVE=1
-if %DURATIONCC% GTR %tlms% set verdict=TLE (Time Limit Exceeded)
-echo %escapec% >> %finalResult% & echo Test Case %no%: >> %finalResult% & echo %escapeb% >> %finalResult% & echo Input: >> %finalResult% & type %input% >> %finalResult% & echo. >> %finalResult% & echo %escapeb% >> %finalResult% & echo Expected Output: >> %finalResult% & type %output% >> %finalResult%  & echo. >> %finalResult% & echo %escapeb% >> %finalResult%  &  echo Your Answer: >> %finalResult% & type %result% >> %finalResult% & echo. >> %finalResult% &  echo %escapeb% >> %finalResult%  & echo Verdict:%verdict% >> %finalResult% & echo Process Run Time: %DURATION% ms >> %finalResult% 
+if %ms% GTR %tlms% set verdict=TLE (Time Limit Exceeded)
+echo %escapec% >> %finalResult% & echo Test Case %no%: >> %finalResult% & echo %escapeb% >> %finalResult% & echo Input: >> %finalResult% & type %input% >> %finalResult% & echo. >> %finalResult% & echo %escapeb% >> %finalResult% & echo Expected Output: >> %finalResult% & type %output% >> %finalResult%  & echo. >> %finalResult% & echo %escapeb% >> %finalResult%  &  echo Your Answer: >> %finalResult% & type %result% >> %finalResult% & echo. >> %finalResult% &  echo %escapeb% >> %finalResult%  & echo Verdict:%verdict% >> %finalResult% & echo Process Run Time: %ms% ms >> %finalResult% 
 if %DIFFACTIVE%==1 echo %escapeb% >> %finalResult% & echo Difference (Your Answer Vs Expected Output): >> %finalResult% & fc /A %result% %output% >> %finalResult% & echo %escapec% >> %finalResult% & echo. >> %finalResult%
 if %DIFFACTIVE%==0 echo %escapec% >> %finalResult% & echo. >> %finalResult%
+endlocal
