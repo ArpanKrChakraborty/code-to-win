@@ -3,20 +3,41 @@ Compilation Successful!
 Test Case 1:  
 =================================================================  
 Input:  
-1
-3
-2 3 5
+4
+1 1337
+13 69
+2 4
+88 89
   
 =================================================================  
 Expected Output:  
-2220
+6 7
+14 21
+2 4
+-1 -1
   
 =================================================================   
 Your Answer:  
-2220
+1 2
+13 26
+2 4
+-1 -1
   
 =================================================================   
-Verdict:AC (Accepted)   
-Process Run Time: 0.00 secs  
+Verdict:WA (Wrong Answer)   
+Process Run Time: 3 ms  
+=================================================================  
+Difference (Your Answer Vs Expected Output):  
+Comparing files D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\result.txt and D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\A\A_OUTPUT_1.TXT
+***** D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\result.txt
+1 2
+13 26
+2 4
+***** D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\A\A_OUTPUT_1.TXT
+6 7
+14 21
+2 4
+*****
+
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  
  

@@ -1,16 +1,18 @@
-# codetowin README
+# README
 
-This is the README for your extension "codetowin". After writing up a brief description, we recommend including the following sections.
+**Code To Win** - *Concentrate on the problem, let the extension do the rest*
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+1. Parses Test Cases from Coding websites such as codechef and codeforces.
+2. Compile-Run against parsed test cases.
+3. Auto verdict results upon running against parsed test cases such, as AC,WA,TLE,CPE,RTE,ILE.
+4. If program output doesn't match with expected output, lines where the two outputs differ are shown in the result.
+5. Add new test cases easily.
+6. Interactive Compile-Run.
+7. Supports C/C++,JAVA and Python (for now, more coming soon).
+8. Browser Independent. Does not depend on any browser extension, so you can use the browser of your choice.
+9. Light weight.
 
 ## Requirements
 

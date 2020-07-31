@@ -13,7 +13,8 @@
 	"activationEvents": [
 		"onCommand:codetowin.newContest",
 		"onCommand:codetowin.compileRun",
-		"onCommand:codetowin.compileAndRun"
+		"onCommand:codetowin.compileAndRun",
+		"onCommand:codetowin.addCustomTestCase"
 	],
 	"main": "./extension.js",
 	"contributes": {
@@ -31,6 +32,11 @@
 			{
 				"command": "codetowin.compileAndRun",
 				"title": "Compile And Run (Interactive Input)",
+				"category": "Code To Win"
+			},
+			{
+				"command": "codetowin.addCustomTestCase",
+				"title" : "Add New Test Case",
 				"category": "Code To Win"
 			}
 		],

@@ -6,6 +6,7 @@ const { time, info } = require('console');
 const fs = require('fs');
 const { exit } = require('process');
 const path = require('path');
+const { FILE } = require('dns');
 
 let global_infoArr=[],contest,lang,totalTerminals=0;
 
@@ -436,7 +437,7 @@ function activate(context) {
 
 				// Appropriate event listeners to carry on testcase run tasks and finally display the result and dispose the listener function
 
-				let dis= vscode.window.onDidCloseTerminal(t => {
+				let dis= vscode.window.onDidCloseTerminal(async t => {
 
 					totalTerminals+=1;
 
@@ -466,11 +467,15 @@ function activate(context) {
 
 					} else {
 
-						let resultTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Result",shellPath:cmdLocation,hideFromUser:true});
+						// let resultTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Result",shellPath:cmdLocation,hideFromUser:true});
 
-						resultTerminal.sendText("CLS && type"+" "+path.join(extDir+"/comm.txt"),true);
+						// resultTerminal.sendText("CLS & type "+path.join(extDir+"/comm.txt"),true);
 
-						resultTerminal.show();
+						// resultTerminal.show();
+
+						
+						let path1=vscode.Uri.file(path.join(workspace_path,'testcases','result.txt'));
+						await vscode.window.showTextDocument(path1,{preserveFocus:true,viewColumn:vscode.ViewColumn.Beside});
 
 						dis.dispose();
 
@@ -501,7 +506,7 @@ function activate(context) {
 
 				// Appropriate event listeners to carry on testcase run tanks and finally display the result and dispose the listener function
 
-				let dis= vscode.window.onDidCloseTerminal(t => {
+				let dis= vscode.window.onDidCloseTerminal(async t => {
 
 					totalTerminals+=1;
 
@@ -532,11 +537,14 @@ function activate(context) {
 
 					} else {
 
-						let resultTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Result",shellPath:bashLocation,hideFromUser:true});
+						// let resultTerminal=vscode.window.createTerminal({cwd:workspace_path,name:"Result",shellPath:bashLocation,hideFromUser:true});
 
-						resultTerminal.sendText("clear ; cat"+" "+path.join(extDir+"/comm.txt"),true);
+						// resultTerminal.sendText("clear ; cat"+" "+path.join(extDir,"comm.txt"),true);
 
-						resultTerminal.show();
+						// resultTerminal.show();
+
+						let path1=vscode.Uri.file(path.join(workspace_path,'testcases','result.txt'));
+						await vscode.window.showTextDocument(path1,{preserveFocus:true,viewColumn:vscode.ViewColumn.Beside});
 
 						dis.dispose();
 
@@ -549,6 +557,10 @@ function activate(context) {
 
 	let disposable_3=vscode.commands.registerCommand('codetowin.compileAndRun',()=>{
 
+
+		var isWin=process.platform === "win32";
+		let cpp_version=vscode.workspace.getConfiguration().get('codetowin').CppVersion;
+		let c_version=vscode.workspace.getConfiguration().get('codetowin').cVersion;
 		let workspace_uri=vscode.workspace.workspaceFolders[0].uri;
 		if(workspace_uri){
 			let workspace_path=workspace_uri.fsPath;
@@ -561,7 +573,7 @@ function activate(context) {
 
 				// make a new terminal
 				let platform=vscode.workspace.getConfiguration().get('codetowin').terminal;
-				if(platform==="cmd"){
+				if(isWin){
 					let cmdLocation=path.normalize("C://Windows//System32//cmd.exe");
 					let terminal=vscode.window.createTerminal({
 						cwd:workspace_path,
@@ -570,8 +582,20 @@ function activate(context) {
 					});
 					terminal.show(true);
 					if(fileExt==='cpp'){
-						let compileText='g++ -g -w -std=c++14 '+fileNameWithExtension+" -o "+fileNameWithoutExtension+" && "+fileNameWithoutExtension+" && "+"echo";
+						let compileText='g++ -g -w -std='+cpp_version+' '+fileNameWithExtension+" -o "+fileNameWithoutExtension+" && "+fileNameWithoutExtension+" && "+"echo.";
 						terminal.sendText(compileText,true);
+					} else if (fileExt==='c') {
+						let compileText='gcc -w -std='+c_version+" "+fileNameWithExtension+" -o "+fileNameWithoutExtension+" && "+fileNameWithoutExtension+" && "+"echo.";
+						terminal.sendText(compileText,true);
+					} else if (fileExt==='java'){
+						let compileText='javac '+fileNameWithExtension+" && java "+fileNameWithoutExtension;
+						terminal.sendText(compileText,true);
+					} else if (fileExt==='python'){
+						let compileText='py ' +fileNameWithExtension;
+						terminal.sendText(compileText,true);
+					} else {
+						vscode.window.showErrorMessage("Source Code Language not yet added in codetowin extension! Sorry!");
+						return;
 					}
 				} else {
 					let bashLocation=path.normalize("/bin/bash");
@@ -582,15 +606,55 @@ function activate(context) {
 					});
 					terminal.show(true);
 					if(fileExt==='cpp'){
-						let compileText='g++ -g -w -std=c++14 '+fileNameWithExtension+" -o "+fileNameWithoutExtension+" && "+"./"+fileNameWithoutExtension+" && "+"echo";
+						let compileText='g++ -g -w -std='+cpp_version+" "+fileNameWithExtension+" -o "+fileNameWithoutExtension+" && "+"./"+fileNameWithoutExtension+" && "+"echo";
 						terminal.sendText(compileText,true);
+					} else if (fileExt==='c') {
+						let compileText='gcc -w -std='+c_version+" "+fileNameWithExtension+" -o "+fileNameWithoutExtension+" && "+"./"+fileNameWithoutExtension+" && "+"echo";
+						terminal.sendText(compileText,true);
+					} else if (fileExt==='java'){
+						let compileText='javac '+fileNameWithExtension+" && java ./"+fileNameWithoutExtension;
+						terminal.sendText(compileText,true);
+					} else if (fileExt==='python'){
+						let compileText='py ' +fileNameWithExtension;
+						terminal.sendText(compileText,true);
+					} else {
+						vscode.window.showErrorMessage("Source Code Language not yet added in codetowin extension! Sorry!");
+						return;
 					}
 				}
 			}
 		}
 	});
 
-	context.subscriptions.push(disposable,disposable_2,disposable_3);
+	let disposable_4=vscode.commands.registerCommand('codetowin.addCustomTestCase',async ()=>{
+		let workspace_uri=vscode.workspace.workspaceFolders[0].uri;
+		if(workspace_uri){
+			let workspace_path=workspace_uri.fsPath;
+			let activeSourceCode=vscode.window.activeTextEditor;
+			if(activeSourceCode){
+				let file_obj=path.parse(activeSourceCode.document.fileName);
+				let fileNameWithoutExtension=file_obj.name;
+				let fileList;
+				if(fs.existsSync(path.join(workspace_path,'testcases',fileNameWithoutExtension))){
+					fileList=fs.readdirSync(path.join(workspace_path,'testcases',fileNameWithoutExtension));
+				} else {
+					vscode.window.showErrorMessage("File Not Found !");
+					return;
+				}
+				let noFiles=fileList.length;
+				noFiles=noFiles/2; noFiles++;
+				fs.writeFileSync(path.join(workspace_path,'testcases',fileNameWithoutExtension,fileNameWithoutExtension+"_input_"+noFiles+".txt"),"Enter Input...");
+				fs.writeFileSync(path.join(workspace_path,'testcases',fileNameWithoutExtension,fileNameWithoutExtension+"_output_"+noFiles+".txt"),"Enter Output...");
+				let path1=vscode.Uri.file(path.join(workspace_path,'testcases',fileNameWithoutExtension,fileNameWithoutExtension+"_input_"+noFiles+".txt"));
+				let path2=vscode.Uri.file(path.join(workspace_path,'testcases',fileNameWithoutExtension,fileNameWithoutExtension+"_output_"+noFiles+".txt"));
+				await vscode.window.showTextDocument(path1,{preserveFocus:false,viewColumn:vscode.ViewColumn.Beside});
+				await vscode.window.showTextDocument(path2,{preserveFocus:false,viewColumn:vscode.ViewColumn.Beside});
+				vscode.window.showInformationMessage("Enter New Test Case");
+			}
+		}
+	});
+
+	context.subscriptions.push(disposable,disposable_2,disposable_3,disposable_4);
 	// context.subscriptions.push(disposable_2);
 }
 exports.activate = activate;
