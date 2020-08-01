@@ -480,7 +480,7 @@ function activate(context) {
 
 						dis.dispose();
 
-						centralTerminal.dispose();
+						centralTerminal.sendText("exit",true);
 					} 
 				});
 			} else  {
@@ -550,7 +550,7 @@ function activate(context) {
 
 						dis.dispose();
 
-						centralTerminal.dispose();
+						centralTerminal.sendText("exit",true);
 					} 
 				});
 			}

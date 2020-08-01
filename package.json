@@ -73,6 +73,11 @@
 						"c99",
 						"c11"
 					]
+				},
+				"codetowin.snippets": {
+					"description": "Location Of Snippets Folder",
+					"type":"string",
+					"format": "uri"
 				}
 			}
 		},
