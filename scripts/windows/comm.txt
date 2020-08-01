@@ -3,40 +3,44 @@ Compilation Successful!
 Test Case 1:  
 =================================================================  
 Input:  
-4
-5 4 0
-1 5 4 3 2
-5 4 1
-1 5 4 3 2
-5 4 4
-10 20 30 40 50
-10 7 3
-4 6 8 2 9 9 7 4 10 9
+3
+3 5
+1 2
+3 4
+2 1000000000
+1 1
+999999999 999999999
+10 3
+5 10
+7 8
   
 =================================================================  
 Expected Output:  
-15
-19
-150
-56
+7
+2000000000
+0
   
 =================================================================   
 Your Answer:  
-C:\Users\Adhoc\AppData\Local\Programs\Python\Python38-32\python.exe: can't open file 'baka': [Errno 2] No such file or directory
+pre-standard C++
+201500
+7
+2000000000
+0
   
 =================================================================   
 Verdict:WA (Wrong Answer)   
-Process Run Time: 120 ms  
+Process Run Time: 30 ms  
 =================================================================  
 Difference (Your Answer Vs Expected Output):  
-Comparing files D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\result.txt and D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\B\B_OUTPUT_1.TXT
+Comparing files D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\result.txt and D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\D\D_OUTPUT_1.TXT
 ***** D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\result.txt
-C:\Users\Adhoc\AppData\Local\Programs\Python\Python38-32\python.exe: can't open file 'baka': [Errno 2] No such file or director
-y
-***** D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\B\B_OUTPUT_1.TXT
-15
+pre-standard C++
 ...
-56
+2000000000
+***** D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\D\D_OUTPUT_1.TXT
+7
+2000000000
 *****
 
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  
