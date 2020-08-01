@@ -22,15 +22,12 @@
 4. Proper Enviorment Variable declaration for the above compilers.
 
 ## Extension Settings
-
-Settings are provided for you to chose the compiler version of your choice for C/C++ language.
-
-For example:
-
 This extension contributes the following settings:
 
-* `Cpp Version`: sets the chosen *-std=* flag while compiling .cpp files
-* `C Version `: sets the chosen *-std=* flag while compiling .c files
+* `Cpp Version`: sets the chosen *-std=* flag while compiling .cpp files.
+* `C Version `: sets the chosen *-std=* flag while compiling .c 
+files.
+* `Path to Snippets Folder`: A valid URI to the directory containing your template files.
 
 ## How to Use:
 

@@ -11,6 +11,7 @@ b="\n=================================================================\n"
 c="\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
 timeLimit=$7
 ext=$8
+flags=$9
 java="java"
 python="python"
 cpp="cpp"
@@ -29,7 +30,7 @@ elif [ $ext = $java ]
 then 
 start=$(date +%N) && java ./$fileNameNoExtension < $input > $result && end=$(date +%N)
 else
-start=$(date +%N) && py ./$fileNameNoExtension < $input > $result && end=$(date +%N)
+start=$(date +%N) && py $flags ./$fileNameNoExtension < $input > $result && end=$(date +%N)
 fi
 interval=`expr $end - $start`
 divi="scale=0; $interval/1000000000"

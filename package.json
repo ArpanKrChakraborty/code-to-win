@@ -25,7 +25,8 @@
 		"onCommand:codetowin.newContest",
 		"onCommand:codetowin.compileRun",
 		"onCommand:codetowin.compileAndRun",
-		"onCommand:codetowin.addCustomTestCase"
+		"onCommand:codetowin.addCustomTestCase",
+		"onCommand:codetowin.readSnippets"
 	],
 	"main": "./extension.js",
 	"contributes": {
@@ -48,6 +49,11 @@
 			{
 				"command": "codetowin.addCustomTestCase",
 				"title" : "Add New Test Case",
+				"category": "Code To Win"
+			},
+			{
+				"command": "codetowin.readSnippets",
+				"title": "Add/Update Snippets",
 				"category": "Code To Win"
 			}
 		],
@@ -74,8 +80,24 @@
 						"c11"
 					]
 				},
+				"codetowin.flags.c":{
+					"type":"string",
+					"description": "Space seperated flags passed to gcc ( for C) while compiling your file. Example \"-O2 -Wall\""
+				},
+				"codetowin.flags.cpp":{
+					"type":"string",
+					"description":"Space seperated additional flags passed to g++ ( for C++ ) while compiling your file. Example \"-Wall -Ofast\""
+				},
+				"codetowin.flags.java":{
+					"type":"string",
+					"description":"Space seperated additional flags passed to JAVA compiler while compiling your file. Example \"-Xmx4M\""
+				},
+				"codetowin.flags.python":{
+					"type":"string",
+					"description":"Space seperated additional flags passed to Python compiler while compiling your file. Example \"-u -Wdefault\""
+				},
 				"codetowin.snippets": {
-					"description": "Location Of Snippets Folder",
+					"description": "Path to Snippets Folder",
 					"type":"string",
 					"format": "uri"
 				}
@@ -100,6 +122,24 @@
 				"command": "codetowin.addCustomTestCase",
 				"key": "ctrl+t",
 				"when": "editorTextFocus"
+			}
+		],
+		"snippets": [
+			{
+				"language": "cpp",
+				"path": "./snippets/cpp.json"
+			},
+			{
+				"language": "c",
+				"path": "./snippets/c.json"
+			},
+			{
+				"language": "java",
+				"path": "./snippets/java.json"
+			},
+			{
+				"language": "python",
+				"path": "./snippets/python.json"
 			}
 		]
 	},

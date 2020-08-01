@@ -10,6 +10,7 @@ set finalResult=%5
 set no=%6
 set /A timeLimit=%7
 set ext=%8
+set flags=%9
 set /A tlms=%timeLimit%*1000
 set "escapeb=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^=^="
 set "escapec=^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>^>"
@@ -25,7 +26,7 @@ if %ext%==c set STARTTIME=!time! & %fileNameNoExtension% < %input% > %result% 2>
 
 if %ext%==java set STARTTIME=!time! & java %fileNameNoExtension% < %input% > %result% 2>&1 & set ENDTIME=!time!
 
-if %ext%==python set STARTTIME=!time! & py %fileNameNoExtension%.py < %input% > %result% 2>&1 & set ENDTIME=!time!
+if %ext%==python set STARTTIME=!time! & py %flags% %fileNameNoExtension%.py < %input% > %result% 2>&1 & set ENDTIME=!time!
 
 rem Get start time:
 for /F "tokens=1-4 delims=:.," %%a in ("%STARTTIME%") do (

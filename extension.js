@@ -388,6 +388,19 @@ function activate(context) {
 
 			let fileNameWithoutExtension=file_obj.name;
 
+			let flags="";
+
+			if(fileExt==="c"){
+				flags=vscode.workspace.getConfiguration('codetowin').flags.c;
+			} else if (fileExt==="cpp"){
+				flags=vscode.workspace.getConfiguration('codetowin').flags.cpp;
+			} else if (fileExt==="java"){
+				flags=vscode.workspace.getConfiguration('codetowin').flags.java;
+			} else if (fileExt==="python"){
+				flags=vscode.workspace.getConfiguration('codetowin').flags.python;
+			} else {
+				return;
+			}
 			// Get the timeLimit associated with this question
 
 			let timeLimit=Number(fs.readFileSync(path.join(workspace_path,'testcases','constraints',fileNameWithoutExtension+'.txt')));
@@ -433,7 +446,7 @@ function activate(context) {
 
 				// Send data to terminal to compile the current active file
 
-				term.sendText(path.join(extDir,"cmdCompile.bat")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt")+" "+cpp_version+" "+c_version,true);
+				term.sendText(path.join(extDir,"cmdCompile.bat")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt")+" "+cpp_version+" "+c_version+" "+flags,true);
 
 				// Appropriate event listeners to carry on testcase run tasks and finally display the result and dispose the listener function
 
@@ -453,7 +466,7 @@ function activate(context) {
 						
 						for(let i=0;i<noFiles;i++){
 
-							runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" & ",false);
+							runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags+" & ",false);
 
 						}
 						runTerminal.sendText("exit 0",true);
@@ -503,7 +516,7 @@ function activate(context) {
 
 				// Send data to terminal to compile the current active file
 
-				term.sendText("source "+path.join(extDir,"/compile.sh")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt")+" "+cpp_version+" "+c_version,true);
+				term.sendText("source "+path.join(extDir,"/compile.sh")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt")+" "+cpp_version+" "+c_version+" "+flags,true);
 
 				// Appropriate event listeners to carry on testcase run tanks and finally display the result and dispose the listener function
 
@@ -523,7 +536,7 @@ function activate(context) {
 
 						for(let i=0;i<noFiles;i++){
 
-							runTerminal.sendText("source "+path.join(extDir,"/run.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" ; ",false);
+							runTerminal.sendText("source "+path.join(extDir,"/run.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags+" ; ",false);
 
 						}
 						runTerminal.sendText("exit 0",true);
@@ -656,7 +669,50 @@ function activate(context) {
 		}
 	});
 
-	context.subscriptions.push(disposable,disposable_2,disposable_3,disposable_4);
+	let disposable_5=vscode.commands.registerCommand('codetowin.readSnippets',async ()=>{
+		// console.log(vscode.workspace.getConfiguration('codetowin'));
+		let extDir=vscode.extensions.getExtension('Arpan.codetowin').extensionUri.fsPath;
+		let snippetDir=vscode.workspace.getConfiguration('codetowin').snippets;
+		snippetDir=path.normalize(snippetDir);
+		let snippetContent
+		if(fs.existsSync(snippetDir)){
+			snippetContent=fs.readdirSync(snippetDir);
+		} else {
+			vscode.window.showErrorMessage("No Such File Or Directory found!");
+			return;
+		}
+
+		await vscode.window.withProgress({location:vscode.ProgressLocation.Notification,title:"Adding/Updating Snippets"},async () =>{
+			for(let i=0;i<snippetContent.length;i++){
+				if(snippetContent[i].indexOf('.txt')!=-1){
+					let snippetName=snippetContent[i].slice(0,snippetContent[i].indexOf('.txt'));
+					let rawSnippet=fs.readFileSync(path.join(snippetDir,snippetContent[i])).toString();
+	
+					// escape " with \"
+					  // split lines by line-break
+					  
+					let sepSnippet=rawSnippet.replace(/\\/g,"\\\\").replace(/"/g,'\\"').split("\r\n");
+					const separatedSnippetLength=sepSnippet.length;
+	
+					// add double quotes around each line apart from the last one
+	
+					const newSnippet = sepSnippet.map((line, index) => {
+						return index === separatedSnippetLength - 1 ? `\"${line}\"` : `\"${line}\",`;
+					});
+	
+					let jsonSnip=`{"${snippetName}":{"prefix": "!cp","body": [ ${newSnippet.join("\n")} ],"description": "Competitive Coding Snippet"}}`;
+					// console.log(jsonSnip);
+					//jsonSnip.replace(/\n/g,jsonSnip);
+					let jsonobj=JSON.parse(jsonSnip)
+					fs.writeFileSync(path.join(extDir,'snippets',snippetName+".json"),JSON.stringify(jsonobj,null,4));
+				}
+			}
+			return
+		});
+		vscode.window.showInformationMessage("Please restart VSCode for changes to take effect");
+	});
+
+	context.subscriptions.push(disposable,disposable_2,disposable_3,disposable_4,disposable_5);
 	// context.subscriptions.push(disposable_2);
 }
 exports.activate = activate;
