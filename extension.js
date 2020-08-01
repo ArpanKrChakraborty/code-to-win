@@ -287,8 +287,6 @@ function activate(context) {
 		fs.mkdir(path.join(workspace_path,"testcases","constraints"),err => {console.log(err)});
 		fs.writeFile(path.join(workspace_path,"testcases","result.txt"),"Empty Result File",err => console.log(err));
 
-		// For Now, Extension will work only for CodeForces
-
 		// User input for contest dashboard
 
 		let inputBoxOpt={placeHolder:"Contest URL", prompt:"Enter the Contest Dashboard URL",ignoreFocusOut:true};
@@ -508,7 +506,7 @@ function activate(context) {
 	
 					let term=vscode.window.createTerminal({cwd:workspace_path,name:"Compile File",shellPath:bashLocation,hideFromUser:true});
 	
-					term.show(true);
+					// term.show(true);
 	
 					// extDir stores the uri to scripts folder witin the extension folder
 	
@@ -688,14 +686,14 @@ function activate(context) {
 
 		await vscode.window.withProgress({location:vscode.ProgressLocation.Notification,title:"Adding/Updating Snippets"},async () =>{
 			for(let i=0;i<snippetContent.length;i++){
-				if(snippetContent[i].indexOf('.txt')!=-1){
+				if(snippetContent[i].indexOf('.txt')!=-1 && (snippetContent[i] === "cpp.txt" || snippetContent[i] === "c.txt" || snippetContent[i] === "python.txt" || snippetContent[i] === "java.txt")){
 					let snippetName=snippetContent[i].slice(0,snippetContent[i].indexOf('.txt'));
 					let rawSnippet=fs.readFileSync(path.join(snippetDir,snippetContent[i])).toString();
 	
 					// escape " with \"
 					  // split lines by line-break
 					  
-					let sepSnippet=rawSnippet.replace(/\\/g,"\\\\").replace(/"/g,'\\"').split("\r\n");
+					let sepSnippet=rawSnippet.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\r/g,"").split("\n");
 					const separatedSnippetLength=sepSnippet.length;
 	
 					// add double quotes around each line apart from the last one
