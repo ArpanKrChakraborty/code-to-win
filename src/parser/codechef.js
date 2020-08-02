@@ -1,15 +1,16 @@
 const vscode = require('vscode');
-const pptr=require('puppeteer');
+const pptr=require('puppeteer-core');
 const { time, info } = require('console');
 const fs = require('fs');
 const { exit } = require('process');
 const path = require('path');
 const { FILE } = require('dns');
 
-module.exports = async function (workspace_path,contest,ext){
-	let infoArr=[]; // An Array to keep the details of the problems
+// Path to Browser
+let browserPath=vscode.workspace.getConfiguration('codetowin').Browser;
 
-	const browser= await pptr.launch({headless:true});
+module.exports = async function (workspace_path,contest,ext){
+	const browser= await pptr.launch({executablePath:browserPath});
 	const page= await browser.newPage();
 
 	await page.tracing.start({
@@ -35,7 +36,7 @@ module.exports = async function (workspace_path,contest,ext){
 		let newURL=contest+"/problems/"+questionList[i];
 		await page.goto(newURL,{ waitUntil: 'networkidle0' });
 
-		let info,start,info_i,timeLimit,memoryLimit,input,output;
+		let info,info_i,timeLimit,input,output;
 
 		// Getting the time limit for the problem
 

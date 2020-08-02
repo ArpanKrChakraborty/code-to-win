@@ -4,7 +4,6 @@
 /*--------------------------------------------- Require Statements ----------------------------------------------*/
 
 const vscode = require('vscode');
-const pptr=require('puppeteer');
 const { time, info } = require('console');
 const fs = require('fs');
 const { exit } = require('process');

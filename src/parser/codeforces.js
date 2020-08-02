@@ -1,14 +1,16 @@
 const vscode = require('vscode');
-const pptr=require('puppeteer');
+const pptr=require('puppeteer-core');
 const { time, info } = require('console');
 const fs = require('fs');
 const { exit } = require('process');
 const path = require('path');
 const { FILE } = require('dns');
 
+let browserPath=vscode.workspace.getConfiguration('codetowin').Browser;
+
 module.exports=async function (workspace_path,contest,ext){
 
-	const browser= await pptr.launch();
+	const browser= await pptr.launch({executablePath:browserPath});
 	const page= await browser.newPage();
 
 	await page.tracing.start({

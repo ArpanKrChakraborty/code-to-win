@@ -63,6 +63,11 @@
 		"configuration": {
 			"title": "Code To Win",
 			"properties": {
+				"codetowin.Browser": {
+					"type": "string",
+					"description": "Path to Chrome or Chromium",
+					"format": "uri"
+				},
 				"codetowin.CppVersion": {
 					"type": "string",
 					"default": "c++11",
@@ -163,6 +168,6 @@
 		"vscode-test": "^1.3.0"
 	},
 	"dependencies": {
-		"puppeteer": "^4.0.1"
+		"puppeteer-core": "^5.2.1"
 	}
 }
