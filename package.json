@@ -17,7 +17,10 @@
 		"vscode": "^1.46.0"
 	},
 	"license": "SEE LICENSE IN LICENSE.txt",
-	"keywords": ["ctw","codewin"],
+	"keywords": [
+		"ctw",
+		"codewin"
+	],
 	"categories": [
 		"Other"
 	],
@@ -48,7 +51,7 @@
 			},
 			{
 				"command": "codetowin.addCustomTestCase",
-				"title" : "Add New Test Case",
+				"title": "Add New Test Case",
 				"category": "Code To Win"
 			},
 			{
@@ -63,7 +66,7 @@
 				"codetowin.CppVersion": {
 					"type": "string",
 					"default": "c++11",
-					"enum":[
+					"enum": [
 						"c++98",
 						"c++03",
 						"c++11",
@@ -72,38 +75,38 @@
 						"c++20"
 					]
 				},
-				"codetowin.cVersion":{
-					"type":"string",
-					"default":"c11",
-					"enum":[
+				"codetowin.cVersion": {
+					"type": "string",
+					"default": "c11",
+					"enum": [
 						"c99",
 						"c11"
 					]
 				},
-				"codetowin.flags.c":{
-					"type":"string",
+				"codetowin.flags.c": {
+					"type": "string",
 					"description": "Space seperated flags passed to gcc ( for C) while compiling your file. Example \"-O2 -Wall\""
 				},
-				"codetowin.flags.cpp":{
-					"type":"string",
-					"description":"Space seperated additional flags passed to g++ ( for C++ ) while compiling your file. Example \"-Wall -Ofast\""
+				"codetowin.flags.cpp": {
+					"type": "string",
+					"description": "Space seperated additional flags passed to g++ ( for C++ ) while compiling your file. Example \"-Wall -Ofast\""
 				},
-				"codetowin.flags.java":{
-					"type":"string",
-					"description":"Space seperated additional flags passed to JAVA compiler while compiling your file. Example \"-Xmx4M\""
+				"codetowin.flags.java": {
+					"type": "string",
+					"description": "Space seperated additional flags passed to JAVA compiler while compiling your file. Example \"-Xmx4M\""
 				},
-				"codetowin.flags.python":{
-					"type":"string",
-					"description":"Space seperated additional flags passed to Python compiler while compiling your file. Example \"-u -Wdefault\""
+				"codetowin.flags.python": {
+					"type": "string",
+					"description": "Space seperated additional flags passed to Python compiler while compiling your file. Example \"-u -Wdefault\""
 				},
 				"codetowin.snippets": {
 					"description": "Path to Snippets Folder",
-					"type":"string",
+					"type": "string",
 					"format": "uri"
 				}
 			}
 		},
-		"keybindings":[
+		"keybindings": [
 			{
 				"command": "codetowin.newContest",
 				"key": "ctrl+n"

@@ -44,7 +44,8 @@
             "        //cout << \"Case #\" << t  << \": \";",
             "        solve();",
             "    }",
-            "}"
+            "}",
+            ""
         ],
         "description": "Competitive Coding Snippet"
     }
