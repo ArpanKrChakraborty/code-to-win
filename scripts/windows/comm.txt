@@ -3,44 +3,45 @@ Compilation Successful!
 Test Case 1:  
 =================================================================  
 Input:  
+2
+1
 3
-3 5
-1 2
-3 4
-2 1000000000
-1 1
-999999999 999999999
-10 3
-5 10
-7 8
   
 =================================================================  
 Expected Output:  
-7
-2000000000
-0
+8
+998
   
 =================================================================   
 Your Answer:  
-pre-standard C++
-201500
-7
-2000000000
-0
+8
+998
+  
+=================================================================   
+Verdict:AC (Accepted)   
+Process Run Time: 100 ms  
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  
+ 
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  
+Test Case 2:  
+=================================================================  
+Input:  
+Enter Input...  
+=================================================================  
+Expected Output:  
+Enter Output...  
+=================================================================   
+Your Answer:  
   
 =================================================================   
 Verdict:WA (Wrong Answer)   
 Process Run Time: 30 ms  
 =================================================================  
 Difference (Your Answer Vs Expected Output):  
-Comparing files D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\result.txt and D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\D\D_OUTPUT_1.TXT
+Comparing files D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\result.txt and D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\B\B_OUTPUT_2.TXT
 ***** D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\result.txt
-pre-standard C++
-...
-2000000000
-***** D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\D\D_OUTPUT_1.TXT
-7
-2000000000
+***** D:\CODE\CODEFORCE\EDU_ROUND_92\TESTCASES\B\B_OUTPUT_2.TXT
+Enter Output...
 *****
 
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  
