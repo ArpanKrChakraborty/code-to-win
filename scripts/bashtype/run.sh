@@ -22,15 +22,15 @@ then
 fi
 if [ $ext = $c ] 
 then 
-start=$(date +%N) && ./$fileNameNoExtension < $input > $result && end=$(date +%N)
+start=$(date +%N) && ./$fileNameNoExtension < $input > $result 2>&1 && end=$(date +%N)
 elif [ $ext = $cpp ]
 then
-start=$(date +%N) && ./$fileNameNoExtension < $input > $result && end=$(date +%N)
+start=$(date +%N) && ./$fileNameNoExtension < $input > $result 2>&1 && end=$(date +%N)
 elif [ $ext = $java ] 
 then 
-start=$(date +%N) && java ./$fileNameNoExtension < $input > $result && end=$(date +%N)
+start=$(date +%N) && java ./$fileNameNoExtension < $input > $result 2>&1 && end=$(date +%N)
 else
-start=$(date +%N) && py $flags ./$fileNameNoExtension < $input > $result && end=$(date +%N)
+start=$(date +%N) && py $flags ./$fileNameNoExtension < $input > $result 2>&1 && end=$(date +%N)
 fi
 interval=`expr $end - $start`
 divi="scale=0; $interval/1000000000"

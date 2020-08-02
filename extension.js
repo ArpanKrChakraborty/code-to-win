@@ -695,7 +695,7 @@ function activate(context) {
 					// escape " with \"
 					  // split lines by line-break
 					  
-					let sepSnippet=rawSnippet.replace(/\\/g,"\\\\").replace(/"/g,'\\"').split("\r\n");
+					let sepSnippet=rawSnippet.replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\r/g,"").split("\n");
 					const separatedSnippetLength=sepSnippet.length;
 	
 					// add double quotes around each line apart from the last one
