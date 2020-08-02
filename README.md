@@ -50,8 +50,6 @@ files.
 4. For Interactive Compile & Run, select the command `Code To Win:Compile And Run (Interactive Input)` from Command Palette or by using keybord shortcut (Default : `F6`).
 5. To add a Custom New Test Case to a problem, select the command `Code To Win: Add New Test Case` from Command Palette or by using keybord shortcut (Default : `Crtl+T`).
 6. To add custom template:  
-             
-             
    * You need to create .txt files with names as languageID. For example for C++ template you need a define `cpp.txt` which contains your desired template.    
    * Next, paste the path to the folder containing your templates
    in `Path to Snippets Folder` setting in extension settings.  

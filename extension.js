@@ -18,8 +18,6 @@ const addCustomTestCase = require('./src/commands/addCustomTestCase.js');
 const readSnippets = require('./src/commands/readSnippets.js');
 /*--------------------------------------------------------------------------------------------------------------*/
 
-let totalTerminals=0;
-
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 

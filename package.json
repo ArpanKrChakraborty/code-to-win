@@ -3,7 +3,7 @@
 	"displayName": "Code To Win",
 	"description": "Parse Test Cases From Coding Websites, Compile/Run and many other features",
 	"publisher": "Arpan",
-	"icon": "./image/codetowinpf.png",
+	"icon": "image/codetowinpf.png",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/ArpanKrChakraborty/code-to-win.git"
