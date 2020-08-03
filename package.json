@@ -8,7 +8,7 @@
 		"type": "git",
 		"url": "https://github.com/ArpanKrChakraborty/code-to-win.git"
 	},
-	"bugs":{
+	"bugs": {
 		"url": "https://github.com/ArpanKrChakraborty/code-to-win/issues",
 		"email": "arpanrkmgec@gmail.com"
 	},
@@ -26,7 +26,8 @@
 		"codewin"
 	],
 	"categories": [
-		"Programming Languages","Snippets"
+		"Programming Languages",
+		"Snippets"
 	],
 	"activationEvents": [
 		"*"
