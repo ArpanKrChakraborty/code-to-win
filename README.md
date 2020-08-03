@@ -31,6 +31,11 @@ files.
 * `Flags`: For setting appropriate flags as you desire when you compile your file.
 * `Path to Snippets Folder`: A valid path to the directory containing your template files.
 * `Broswer Path`: A path to the location of your Chrome/Chromium/Firefox executable/binary.
+
+## Quick Links  
+* Download Chromium: https://www.chromium.org/getting-involved/download-chromium  
+* Download Chrome: https://www.google.com/intl/en_in/chrome/
+* Download Firefox (not preferred): https://www.mozilla.org/en-US/firefox/new/
 ## How to Use:
 
 1. Install the extension from VSCode marketplace.
