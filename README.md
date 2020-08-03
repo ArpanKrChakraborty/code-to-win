@@ -63,7 +63,7 @@ files.
    * Now to Update/Add Template select the command `Code To Win:Add New Test Case` from Command Palette . **Note**: You need to select the command only once every time you add a new template or update an existing one.
    * Press `!cp` in a source file to paste the template matching that source file language ID.
 
-![Alt Text](./image/codetowingif.gif)
+[![ezgif.com-gif-maker4669cb1db11f08a1.gif](https://s6.gifyu.com/images/ezgif.com-gif-maker4669cb1db11f08a1.gif)](https://gifyu.com/image/WAEG)
 
 ## Bug Reports
 
