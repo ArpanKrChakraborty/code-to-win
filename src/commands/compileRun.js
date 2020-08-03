@@ -197,7 +197,7 @@ module.exports=async ()=>{
 
                 // Send data to terminal to compile the current active file
 
-                term.sendText("source "+path.join(extDir,"/compile.sh")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt")+" "+cpp_version+" "+c_version+" "+flags,true);
+                term.sendText("source "+path.join(extDir,"/bashCompile.sh")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt")+" "+cpp_version+" "+c_version+" "+flags,true);
 
                 // Appropriate event listeners to carry on testcase run tanks and finally display the result and dispose the listener function
 
@@ -217,9 +217,9 @@ module.exports=async ()=>{
 
                         for(let i=0;i<noFiles;i++){
                             if(i===noFiles-1){
-                                runTerminal.sendText("source "+path.join(extDir,"/run.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags,true);
+                                runTerminal.sendText("source "+path.join(extDir,"/bashRun.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags,true);
                             } else {
-                                runTerminal.sendText("source "+path.join(extDir,"/run.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags+" ; ",false);
+                                runTerminal.sendText("source "+path.join(extDir,"/bashRun.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags+" ; ",false);
                             }
                         }
                         runTerminal.sendText("exit 0",true);
