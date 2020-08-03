@@ -8,6 +8,10 @@
 		"type": "git",
 		"url": "https://github.com/ArpanKrChakraborty/code-to-win.git"
 	},
+	"bugs":{
+		"url": "https://github.com/ArpanKrChakraborty/code-to-win/issues",
+		"email": "arpanrkmgec@gmail.com"
+	},
 	"author": {
 		"name": "Arpan Kumar Chakraborty",
 		"email": "arpanrkmgec@gmail.com"
@@ -22,7 +26,7 @@
 		"codewin"
 	],
 	"categories": [
-		"Other"
+		"Programming Languages","Snippets"
 	],
 	"activationEvents": [
 		"*"
