@@ -61,7 +61,7 @@
 			"properties": {
 				"codetowin.browser": {
 					"type": "string",
-					"description": "Path to binaries/executable of Chrome/Chromium/FireFox"
+					"description": "Path to binaries/executable of Chrome/Chromium/Firefox"
 				},
 				"codetowin.CppVersion": {
 					"type": "string",

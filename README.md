@@ -20,6 +20,7 @@
 2. **Any** JAVA compiler of your desire.
 3. **Any** version of python of your desire.
 4. Proper Enviorment Variable declaration for the above compilers.
+5. You are free to use any browser of your choice, but for parsing purposes **Chrome/Chromium/Firefox** must be installed. 
 
 ## Extension Settings
 This extension contributes the following settings:
@@ -29,10 +30,11 @@ This extension contributes the following settings:
 files.
 * `Flags`: For setting appropriate flags as you desire when you compile your file.
 * `Path to Snippets Folder`: A valid URI to the directory containing your template files.
+* `Broswer`: A URI to the location of your Chrome/Chromium/Firefox executable/binary.
 ## How to Use:
 
 1. Install the extension from VSCode marketplace.
-2. For Parsing Test Cases from contest website you need to have a working directory/workspace. The name of the workspace should not contain any spaces (Replace spaces with underscore) : 
+2. For Parsing Test Cases from contest website you need to have a working directory/workspace. The name of the workspace should not contain any spaces (Replace spaces with underscore). You also need to provide path to your Chrome/Chromium/Firefox executable/binary in extension settings : 
    * Next, you have to select the command `Code To Win:New Contest` from Command Palette or by using keyboard shortcut (Default : `Ctrl+N`).
    * Once you select that, an input box should open where you have to enter the contest dashboard URL.  
    Examples of Valid URLs:    
