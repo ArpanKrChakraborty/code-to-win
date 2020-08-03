@@ -138,14 +138,19 @@ module.exports=async ()=>{
                         runTerminal.sendText("@echo off",true);
                         
                         for(let i=0;i<noFiles;i++){
-
-                            runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags+" & ",false);
-
+                            if(i===noFiles-1){
+                                runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags,true);
+                            } else {
+                                runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags+" & ",false);
+                            }
                         }
                         runTerminal.sendText("exit 0",true);
                         setTimeout(() => {
                             if(runTerminal.exitStatus===undefined){
-                                centralTerminal.sendText("@echo off && type "+path.join(workspace_path,"testcases","result.txt")+" >> "+path.join(extDir,"/comm.txt"),true);
+                                fs.copyFile(path.join(workspace_path,"testcases","result.txt"),path.join(extDir,"/comm.txt"),(err)=>{
+                                    if(err) console.log(err);
+                                });
+                                // centralTerminal.sendText("@echo off && type "+path.join(workspace_path,"testcases","result.txt")+" >> "+path.join(extDir,"/comm.txt"),true);
                                 // Dispose the terminal and associated Resources
                                 vscode.window.showInformationMessage("ILE ! Process force exited !");
                                 runTerminal.dispose();
@@ -159,8 +164,10 @@ module.exports=async ()=>{
                         // resultTerminal.sendText("CLS & type "+path.join(extDir+"/comm.txt"),true);
 
                         // resultTerminal.show();
-
-                        centralTerminal.sendText("type "+path.join(extDir,"comm.txt")+" > "+path.join(workspace_path,"testcases","result.txt"),true);
+                        fs.copyFile(path.join(extDir,"comm.txt"),path.join(workspace_path,"testcases","result.txt"),(err)=>{
+                            if(err) console.log(err);
+                        });
+                        // centralTerminal.sendText("type "+path.join(extDir,"comm.txt")+" > "+path.join(workspace_path,"testcases","result.txt"),true);
                         let path1=vscode.Uri.file(path.join(workspace_path,'testcases','result.txt'));
                         await vscode.window.showTextDocument(path1,{preserveFocus:true,viewColumn:vscode.ViewColumn.Beside});
 
@@ -209,15 +216,20 @@ module.exports=async ()=>{
                         // runTerminal.sendText("@echo off",true);
 
                         for(let i=0;i<noFiles;i++){
-
-                            runTerminal.sendText("source "+path.join(extDir,"/run.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags+" ; ",false);
-
+                            if(i===noFiles-1){
+                                runTerminal.sendText("source "+path.join(extDir,"/run.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags,true);
+                            } else {
+                                runTerminal.sendText("source "+path.join(extDir,"/run.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags+" ; ",false);
+                            }
                         }
                         runTerminal.sendText("exit 0",true);
                         // runTerminal.sendText("echo 'done'",true);
                         setTimeout(() => {
                             if(runTerminal.exitStatus===undefined){
-                                centralTerminal.sendText("cat "+path.join(workspace_path,"/testcases/result.txt")+" >> "+path.join(extDir,"/comm.txt"),true);
+                                fs.copyFile(path.join(workspace_path,"/testcases/result.txt"),path.join(extDir,"/comm.txt"),(err)=>{
+                                    if(err) console.log(err);
+                                });
+                                // centralTerminal.sendText("cat "+path.join(workspace_path,"/testcases/result.txt")+" >> "+path.join(extDir,"/comm.txt"),true);
                                 // Dispose the terminal and associated Resources
                                 runTerminal.dispose();
                                 vscode.window.showInformationMessage("ILE ! Process force exited !");
@@ -231,7 +243,10 @@ module.exports=async ()=>{
                         // resultTerminal.sendText("clear ; cat"+" "+path.join(extDir,"comm.txt"),true);
 
                         // resultTerminal.show();
-                        centralTerminal.sendText("cp "+path.join(extDirPath,'scripts','bashtype','comm.txt')+" "+path.join(workspace_path,'testcases','result.txt'),true);
+                        fs.copyFile(path.join(extDirPath,'scripts','bashtype','comm.txt'),path.join(workspace_path,'testcases','result.txt'),(err)=>{
+                            if(err) console.log(err);
+                        });
+                        // centralTerminal.sendText("cp "+path.join(extDirPath,'scripts','bashtype','comm.txt')+" "+path.join(workspace_path,'testcases','result.txt'),true);
                         let path1=vscode.Uri.file(path.join(workspace_path,'testcases','result.txt'));
                         await vscode.window.showTextDocument(path1,{preserveFocus:true,viewColumn:vscode.ViewColumn.Beside});
 

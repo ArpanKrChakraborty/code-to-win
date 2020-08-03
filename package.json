@@ -59,7 +59,7 @@
 		"configuration": {
 			"title": "Code To Win",
 			"properties": {
-				"codetowin.browser": {
+				"codetowin.browserPath": {
 					"type": "string",
 					"description": "Path to binaries/executable of Chrome/Chromium/Firefox"
 				},

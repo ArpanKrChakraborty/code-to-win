@@ -18,9 +18,9 @@
 
 1. **GNU Compiler** for C/C++. (Support for other C/C++ compilers coming soon)
 2. **Any** JAVA compiler of your desire.
-3. **Any** version of python of your desire.
+3. **Any** version of python your desire.
 4. Proper Enviorment Variable declaration for the above compilers.
-5. You are free to use any browser of your choice, but for parsing purposes **Chrome/Chromium/Firefox** must be installed. 
+5. You are free to use any browser of your choice, but for parsing purposes **Chrome/Chromium** must be installed  (**Firefox** also works but it bugs out sometimes, so better to use to other two options).
 
 ## Extension Settings
 This extension contributes the following settings:
@@ -29,8 +29,8 @@ This extension contributes the following settings:
 * `C Version `: sets the chosen *-std=* flag while compiling .c 
 files.
 * `Flags`: For setting appropriate flags as you desire when you compile your file.
-* `Path to Snippets Folder`: A valid URI to the directory containing your template files.
-* `Broswer`: A URI to the location of your Chrome/Chromium/Firefox executable/binary.
+* `Path to Snippets Folder`: A valid path to the directory containing your template files.
+* `Broswer Path`: A path to the location of your Chrome/Chromium/Firefox executable/binary.
 ## How to Use:
 
 1. Install the extension from VSCode marketplace.
@@ -41,8 +41,8 @@ files.
    https://codeforces.com/contest/1388  
    https://www.codechef.com/LTIME86B  
    Examples of Invalid URLs:  
-   https://www.codechef.com/LTIME86
-   https://www.codechef.com/BGS12020?itm_campaign=contest_listing  
+   https://www.codechef.com/LTIME86  
+    https://www.codechef.com/BGS12020?itm_campaign=contest_listing  
    The suffix of URL should always end with the **contest code**. 
    The second URL in the context of invalid URLs is wrong because it doesnt mention the division.  
    * After entering the valid URL a dropdown appears from which you can select the langauge in which you want to write your code for the contest. If you dont see the language of your desire in the dropdown or want to do a mix of languages, select the `Custom` option.
@@ -58,6 +58,11 @@ files.
    * Now to Update/Add Template select the command `Code To Win:Add New Test Case` from Command Palette . **Note**: You need to select the command only once every time you add a new template or update an existing one.
    * Press `!cp` in a source file to paste the template matching that source file language ID.
 
+![Alt Text](./image/codetowingif.gif)
+
+## Bug Reports
+
+You can report bugs by creating issues.
 
 ## Release Notes
 
@@ -66,6 +71,7 @@ files.
 Initial release of Code To Win Extension.
 
 **Enjoy!**
+**Please share the extension to your friends !**
 
 -----------------------------------------------------------------------------------------------------------
 

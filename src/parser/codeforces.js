@@ -6,9 +6,8 @@ const { exit } = require('process');
 const path = require('path');
 const { FILE } = require('dns');
 
-let browserURI=vscode.workspace.getConfiguration('codetowin').browser;
-
 module.exports=async function (workspace_path,contest,ext){
+	let browserURI=vscode.workspace.getConfiguration('codetowin').browserPath;
 	const browser= await pptr.launch({executablePath:browserURI});
 	const page= await browser.newPage();
 
