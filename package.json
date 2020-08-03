@@ -25,11 +25,7 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:codetowin.newContest",
-		"onCommand:codetowin.compileRun",
-		"onCommand:codetowin.compileAndRun",
-		"onCommand:codetowin.addCustomTestCase",
-		"onCommand:codetowin.readSnippets"
+		"*"
 	],
 	"main": "./extension.js",
 	"contributes": {
@@ -63,6 +59,10 @@
 		"configuration": {
 			"title": "Code To Win",
 			"properties": {
+				"codetowin.browser": {
+					"type": "string",
+					"description": "Path to binaries/executable of Chrome/Chromium/FireFox"
+				},
 				"codetowin.CppVersion": {
 					"type": "string",
 					"default": "c++11",
@@ -163,6 +163,6 @@
 		"vscode-test": "^1.3.0"
 	},
 	"dependencies": {
-		"puppeteer": "https://registry.npmjs.org/puppeteer/-/puppeteer-5.2.1.tgz"
+		"puppeteer-core": "^5.2.1"
 	}
 }
