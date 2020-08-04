@@ -20,7 +20,7 @@
 2. **Any** JAVA compiler of your desire.
 3. **Any** version of python your desire.
 4. Proper Enviorment Variable declaration for the above compilers.
-5. You are free to use any browser of your choice, but for parsing purposes **Chrome/Chromium** must be installed  (**Firefox** also works but it bugs out sometimes, so better to use to other two options).
+5. You are free to use any browser of your choice, but for parsing purposes **Chrome/Chromium** must be installed  (**Firefox-Nightly** also works but it bugs out sometimes, so better to use to the other two options).
 
 ## Extension Settings
 This extension contributes the following settings:
@@ -30,12 +30,12 @@ This extension contributes the following settings:
 files.
 * `Flags`: For setting appropriate flags as you desire when you compile your file.
 * `Path to Snippets Folder`: A valid path to the directory containing your template files.
-* `Broswer Path`: A path to the location of your Chrome/Chromium/Firefox executable/binary.
+* `Broswer Path`: A path to the location of your Chrome/Chromium/Firefox-Nighty executable/binary.
 
 ## Quick Links  
 * Download Chromium: https://www.chromium.org/getting-involved/download-chromium  
 * Download Chrome: https://www.google.com/intl/en_in/chrome/
-* Download Firefox (not preferred): https://www.mozilla.org/en-US/firefox/new/
+* Download Firefox-Nightly (not preferred): https://www.mozilla.org/en-US/firefox/64.0a1/releasenotes/
 ## How to Use:
 
 1. Install the extension from VSCode marketplace.

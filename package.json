@@ -66,7 +66,7 @@
 			"properties": {
 				"codetowin.browserPath": {
 					"type": "string",
-					"description": "Path to binaries/executable of Chrome/Chromium/Firefox"
+					"description": "Path to binaries/executable of Chrome/Chromium/Firefox-Nightly"
 				},
 				"codetowin.CppVersion": {
 					"type": "string",
