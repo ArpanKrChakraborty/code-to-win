@@ -66,13 +66,19 @@ module.exports = async function (workspace_path,contest,ext){
 
 		// Getting Input
 
-		await page.$$eval('.problem-statement pre:nth-of-type(1)',x => {
+		let totalPre;
+
+		await page.$$eval('.problem-statement pre',x=>{
+			return x.length;
+		}).then(result => {totalPre=result});
+
+		await page.$$eval(`.problem-statement pre:nth-of-type(${totalPre-1})`,x => {
 			return x.map( y => y.innerText);
 		}).then(result => {input=result});
 
 		// Getting Output
 
-		await page.$$eval('.problem-statement pre:nth-of-type(2)', x => {
+		await page.$$eval(`.problem-statement pre:nth-of-type(${totalPre})`, x => {
 			return x.map(y=>y.innerText);
 		}).then(result => {output=result});
 

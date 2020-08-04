@@ -30,7 +30,7 @@ This extension contributes the following settings:
 files.
 * `Flags`: For setting appropriate flags as you desire when you compile your file.
 * `Path to Snippets Folder`: A valid path to the directory containing your template files.
-* `Broswer Path`: A path to the location of your Chrome/Chromium/Firefox-Nighty executable/binary.
+* `Broswer Path`: A path to the location of your Chrome/Chromium/Firefox-Nightly executable/binary.
 
 ## Quick Links  
 * Download Chromium: https://www.chromium.org/getting-involved/download-chromium  
