@@ -18,7 +18,7 @@
 
 1. **GNU Compiler** for C/C++. (Support for other C/C++ compilers coming soon)
 2. **Any** JAVA compiler of your desire.
-3. **Any** version of python your desire.
+3. **Any** version of python you desire.
 4. Proper Enviorment Variable declaration for the above compilers.
 5. You are free to use any browser of your choice, but for parsing purposes **Chrome/Chromium** must be installed  (**Firefox-Nightly** also works but it bugs out sometimes, so better to use to the other two options).
 
