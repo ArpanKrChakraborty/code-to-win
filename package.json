@@ -16,7 +16,7 @@
 		"name": "Arpan Kumar Chakraborty",
 		"email": "arpanrkmgec@gmail.com"
 	},
-	"version": "1.0.2",
+	"version": "1.0.0",
 	"engines": {
 		"vscode": "^1.46.0"
 	},
