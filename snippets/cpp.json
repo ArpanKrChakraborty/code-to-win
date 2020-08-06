@@ -2,10 +2,7 @@
     "cpp": {
         "prefix": "!cp",
         "body": [
-            "#include<bit/stdc++.h>",
-            "using namespace std;",
-            "",
-            "BBBBOOOOOOO YYAAAA"
+            "Empty Snippet!"
         ],
         "description": "Competitive Coding Snippet"
     }

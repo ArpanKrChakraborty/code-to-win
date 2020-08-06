@@ -27,9 +27,9 @@ module.exports=async function () {
     // Create the testcase directory wihin your workspace Folder (Can use either vscode.workspace.fs or generic node fs)
     // Also create the rsult.txt file where your program output will be saved.
 
-    fs.mkdir(path.join(workspace_path,"testcases"),(err)=>{console.log(err)});
-    fs.mkdir(path.join(workspace_path,"testcases","constraints"),err => {console.log(err)});
-    fs.writeFile(path.join(workspace_path,"testcases","result.txt"),"Empty Result File",err => console.log(err));
+    fs.mkdirSync(path.join(workspace_path,"testcases"));
+    fs.mkdirSync(path.join(workspace_path,"testcases","constraints"));
+    fs.writeFileSync(path.join(workspace_path,"testcases","result.txt"),"Empty Result File");
 
     // User input for contest dashboard
 

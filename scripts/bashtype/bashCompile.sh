@@ -11,13 +11,13 @@ flags=$7
 echo "Error: Compile Error (CPE)" > $commfile
 if [ $ext = cpp ] 
 then
-    g++ $flags -std=$cppverison -w $fileNameWithExtension -o $fileNameWithoutExtension 2>> $commfile
+    g++ $flags -std=$cppverison "$fileNameWithExtension" -o "$fileNameWithoutExtension" 2>> "$commfile"
 elif [ $ext = c ]
 then
-    gcc $flags -std=$cversion  $fileNameWithExtension -o $fileNameWithoutExtension 2>> $commfile
+    gcc $flags -std=$cversion  "$fileNameWithExtension" -o "$fileNameWithoutExtension" 2>> "$commfile"
 elif [ $ext = java ]
 then
-    javac $flags $fileNameWithExtension 2>> $commfile
+    javac $flags "$fileNameWithExtension" 2>> "$commfile"
 else 
     echo "Python"
 fi

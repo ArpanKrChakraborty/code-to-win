@@ -20,7 +20,7 @@
 2. **Any** JAVA compiler of your desire.
 3. **Any** version of python you desire.
 4. Proper Enviorment Variable declaration for the above compilers.
-5. You are free to use any browser of your choice, but for parsing purposes **Chrome/Chromium** must be installed  (**Firefox-Nightly** also works but it bugs out sometimes, so better to use to the other two options).
+5. You are free to use any browser of your choice, but for parsing purposes **Chrome/Chromium** must be installed  (**Firefox-Nightly** also works but it bugs out sometimes, hence not recommended).
 
 ## Extension Settings
 This extension contributes the following settings:
@@ -35,11 +35,12 @@ files.
 ## Quick Links  
 * Download Chromium: https://www.chromium.org/getting-involved/download-chromium  
 * Download Chrome: https://www.google.com/intl/en_in/chrome/
-* Download Firefox-Nightly (not preferred): https://www.mozilla.org/en-US/firefox/64.0a1/releasenotes/
+* Download Firefox-Nightly (not recommended): https://www.mozilla.org/en-US/firefox/64.0a1/releasenotes/  
+
 ## How to Use:
 
-1. Install the extension from VSCode marketplace.
-2. For Parsing Test Cases from contest website you need to have a working directory/workspace. The name of the workspace should not contain any spaces (Replace spaces with underscore). You also need to provide path to your Chrome/Chromium/Firefox executable/binary in extension settings : 
+1. Install the extension from VSCode marketplace --> https://marketplace.visualstudio.com/items?itemName=Arpan.codetowin.
+2. For Parsing Test Cases from contest website you need to have a working directory/workspace. You also need to provide path to your Chrome/Chromium/Firefox-Nightly executable/binary in extension settings : 
    * Next, you have to select the command `Code To Win:New Contest` from Command Palette or by using keyboard shortcut (Default : `Ctrl+N`).
    * Once you select that, an input box should open where you have to enter the contest dashboard URL.  
    Examples of Valid URLs:    
@@ -47,11 +48,11 @@ files.
    https://www.codechef.com/LTIME86B  
    Examples of Invalid URLs:  
    https://www.codechef.com/LTIME86  
-    https://www.codechef.com/BGS12020?itm_campaign=contest_listing  
-   The suffix of URL should always end with the **contest code**. 
-   The second URL in the context of invalid URLs is wrong because it doesnt mention the division.  
+   https://www.codechef.com/BGS12020?itm_campaign=contest_listing  
+   The suffix of URL should always end with the **contest code**.  
+   The first URL in the context of invalid URLs is wrong because it doesnt mention the contest division.  
    * After entering the valid URL a dropdown appears from which you can select the langauge in which you want to write your code for the contest. If you dont see the language of your desire in the dropdown or want to do a mix of languages, select the `Custom` option.
-   * Wait for a few seconds for the problems to get parsed. Once done, a promt should appear indicating the process of parsing is complete.  
+   * Wait for a few seconds for the problems to get parsed. Once done, a prompt should appear indicating the process of parsing is complete.  
 <br>  
 3. To Compile & Run against parsed testcases, select the command `Code To Win:Compile And Run Against Parsed Test Cases` from Command Palette or by using keybord shortcut (Default : `F5`).
 4. For Interactive Compile & Run, select the command `Code To Win:Compile And Run (Interactive Input)` from Command Palette or by using keybord shortcut (Default : `F6`).
@@ -74,6 +75,14 @@ You can report bugs by creating issues.
 ### 1.0.0
 
 Initial release of Code To Win Extension.
+
+### 1.0.1
+
+Fixed CodeChef Parser.
+
+### 1.0.2
+
+Fixed namespace problems.
 
 **Enjoy!**
 **Please share the extension to your friends !**

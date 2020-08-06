@@ -19,20 +19,20 @@ cpp="cpp"
 normalc="c"
 if [ $no == 1 ] 
 then
-    echo "Compilation Successful!" > $finalResult ; clear ; echo -e "Running Against Test-Cases:\n(Process Will be halted automatically after 1 min to avoid infinte loop)"
+    echo "Compilation Successful!" > "$finalResult" ; clear ; echo -e "Running Against Test-Cases:\n(Process Will be halted automatically after 1 min to avoid infinte loop)"
 fi
 eval start=$(date +%N)
-if [ $ext = $c ] 
+if [ $ext = $normalc ] 
 then 
-./$fileNameNoExtension < $input > $result 2>&1 
+./"$fileNameNoExtension" < "$input" > "$result" 2>&1 
 elif [ $ext = $cpp ]
 then
-./$fileNameNoExtension < $input > $result 2>&1  
+./"$fileNameNoExtension" < "$input" > "$result" 2>&1  
 elif [ $ext = $java ] 
 then 
-java $fileNameNoExtension < $input > $result 2>&1  
+java "$fileNameNoExtension" < "$input" > "$result" 2>&1  
 else
-python3 $flags $fileNameNoExtension.py < $input > $result 2>&1  
+python3 $flags "$fileNameNoExtension".py < "$input" > "$result" 2>&1  
 fi
 eval end=$(date +%N)
 interval=`expr $end - $start`
@@ -45,7 +45,7 @@ if [ $ti -gt $timeLimit ]
 then
     TLEACTIVE=1 
 fi
-diff -y -B -Z $result $output
+diff -y -B -Z "$result" "$output"
 if [ $? == 0 ] 
 then
     DIFFACTIVE=0
@@ -59,10 +59,10 @@ else
     verdict="WA (Wrong Answer)"
     DIFFACTIVE=1
 fi
-echo  $c >> $finalResult && echo "Test Case $no:" >> $finalResult && echo $b >> $finalResult && echo "Input:" >> $finalResult && cat $input >> $finalResult && echo >> $finalResult && echo $b >> $finalResult && echo "Expected Output:" >> $finalResult && cat $output >> $finalResult && echo >> $finalResult && echo $b >> $finalResult && echo "Your Answer:" >> $finalResult && cat $result >> $finalResult && echo >> $finalResult && echo $b >> $finalResult && echo "Verdict:$verdict" >> $finalResult && echo "Process Run Time: $ti ms" >> $finalResult;
+echo  $c >> "$finalResult" && echo "Test Case $no:" >> "$finalResult" && echo $b >> "$finalResult" && echo "Input:" >> "$finalResult" && cat "$input" >> "$finalResult" && echo >> "$finalResult" && echo $b >> "$finalResult" && echo "Expected Output:" >> "$finalResult" && cat "$output" >> "$finalResult" && echo >> "$finalResult" && echo $b >> "$finalResult" && echo "Your Answer:" >> "$finalResult" && cat "$result" >> "$finalResult" && echo >> "$finalResult" && echo $b >> "$finalResult" && echo "Verdict:$verdict" >> "$finalResult" && echo "Process Run Time: $ti ms" >> "$finalResult";
 if [ $DIFFACTIVE == 1 ]
 then
-    echo $b >> $finalResult ; echo "Difference (Answer Vs Expected Output)" >> $finalResult ; diff -y -B -Z $result $output >> $finalResult ; echo $c >> $finalResult
+    echo $b >> "$finalResult" ; echo "Difference (Answer Vs Expected Output)" >> "$finalResult" ; diff -y -B -Z "$result" "$output" >> "$finalResult" ; echo $c >> "$finalResult"
 else 
-    echo $c >> $finalResult
+    echo $c >> "$finalResult"
 fi

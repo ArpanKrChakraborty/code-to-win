@@ -18,7 +18,7 @@ module.exports=async ()=>{
     // Check is no workspace is opened
 
     if(workspace_uri===undefined){
-        vscode.window.showInformationMessage("No Active Workspace! Please open an active workspace!");
+        vscode.window.showErrorMessage("No Active Workspace! Please open an active workspace!");
         return;
     }
 
@@ -70,7 +70,7 @@ module.exports=async ()=>{
         } else if (fileExt==="python"){
             flags=vscode.workspace.getConfiguration('codetowin').flags.python;
         } else {
-            vscode.window.showErrorMessage("Source Code Language not yet added in codetowin extension! Sorry!");
+            vscode.window.showErrorMessage("Source Code Language not yet added in Code To Win extension! Sorry!");
             return;
         }
         // Get the timeLimit associated with this question
@@ -119,8 +119,11 @@ module.exports=async ()=>{
 
                 // Send data to terminal to compile the current active file
 
-                term.sendText(path.join(extDir,"cmdCompile.bat")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt")+" "+cpp_version+" "+c_version+" "+flags,true);
-
+                if(flags.length!=0){
+                    term.sendText(`"${path.join(extDir,"cmdCompile.bat")}" ${fileExt} "${fileNameWithExtension}" "${fileNameWithoutExtension}" "${path.join(extDir,"/comm.txt")}" ${cpp_version} ${c_version} "${flags}"`,true);
+                } else {
+                    term.sendText(`"${path.join(extDir,"cmdCompile.bat")}" ${fileExt} "${fileNameWithExtension}" "${fileNameWithoutExtension}" "${path.join(extDir,"/comm.txt")}" ${cpp_version} ${c_version}`,true);
+                }
                 // Appropriate event listeners to carry on testcase run tasks and finally display the result and dispose the listener function
 
                 let dis= vscode.window.onDidCloseTerminal(async t => {
@@ -139,9 +142,17 @@ module.exports=async ()=>{
                         
                         for(let i=0;i<noFiles;i++){
                             if(i===noFiles-1){
-                                runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags,true);
+                                if(flags.length!=0){
+                                    runTerminal.sendText(`"${path.join(extDir,"/cmdRun.bat")}" "${fileNameWithoutExtension}" "${path.join(testcaseDir,fileList[i])}" "${path.join(testcaseDir,fileList[i+noFiles])}" "${path.join(workspace_path,"/testcases/result.txt")}" "${path.join(extDir,"/comm.txt")}" ${(i+1)} ${timeLimit} ${fileExt} "${flags}"`,true);
+                                } else {
+                                    runTerminal.sendText(`"${path.join(extDir,"/cmdRun.bat")}" "${fileNameWithoutExtension}" "${path.join(testcaseDir,fileList[i])}" "${path.join(testcaseDir,fileList[i+noFiles])}" "${path.join(workspace_path,"/testcases/result.txt")}" "${path.join(extDir,"/comm.txt")}" ${(i+1)} ${timeLimit} ${fileExt}`,true);
+                                }
                             } else {
-                                runTerminal.sendText(path.join(extDir,"/cmdRun.bat")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags+" & ",false);
+                                if(flags.length!=0){
+                                    runTerminal.sendText(`"${path.join(extDir,"/cmdRun.bat")}" "${fileNameWithoutExtension}" "${path.join(testcaseDir,fileList[i])}" "${path.join(testcaseDir,fileList[i+noFiles])}" "${path.join(workspace_path,"/testcases/result.txt")}" "${path.join(extDir,"/comm.txt")}" ${(i+1)} ${timeLimit} ${fileExt} "${flags}" & `,false);
+                                } else {
+                                    runTerminal.sendText(`"${path.join(extDir,"/cmdRun.bat")}" "${fileNameWithoutExtension}" "${path.join(testcaseDir,fileList[i])}" "${path.join(testcaseDir,fileList[i+noFiles])}" "${path.join(workspace_path,"/testcases/result.txt")}" "${path.join(extDir,"/comm.txt")}" ${(i+1)} ${timeLimit} ${fileExt}  & `,false);
+                                }
                             }
                         }
                         runTerminal.sendText("exit 0",true);
@@ -197,8 +208,11 @@ module.exports=async ()=>{
 
                 // Send data to terminal to compile the current active file
 
-                term.sendText("source "+path.join(extDir,"/bashCompile.sh")+" "+fileExt+" "+fileNameWithExtension+" "+fileNameWithoutExtension+" "+path.join(extDir,"/comm.txt")+" "+cpp_version+" "+c_version+" "+flags,true);
-
+                if(flags.length!=0){
+                    term.sendText(`source "${path.join(extDir,"/bashCompile.sh")}" ${fileExt} "${fileNameWithExtension}" "${fileNameWithoutExtension}" "${path.join(extDir,"/comm.txt")}" ${cpp_version} ${c_version} "${flags}"`,true);
+                } else {
+                    term.sendText(`source "${path.join(extDir,"/bashCompile.sh")}" ${fileExt} "${fileNameWithExtension}" "${fileNameWithoutExtension}" "${path.join(extDir,"/comm.txt")}" ${cpp_version} ${c_version}`,true);
+                }
                 // Appropriate event listeners to carry on testcase run tanks and finally display the result and dispose the listener function
 
                 let dis= vscode.window.onDidCloseTerminal(async t => {
@@ -217,9 +231,17 @@ module.exports=async ()=>{
 
                         for(let i=0;i<noFiles;i++){
                             if(i===noFiles-1){
-                                runTerminal.sendText("source "+path.join(extDir,"/bashRun.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags,true);
+                                if(flags.length!=0){
+                                    runTerminal.sendText(`source "${path.join(extDir,"/bashRun.sh")}" "${fileNameWithoutExtension}" "${path.join(testcaseDir,fileList[i])}" "${path.join(testcaseDir,fileList[i+noFiles])}" "${path.join(workspace_path,"/testcases/result.txt")}" "${path.join(extDir,"/comm.txt")}" ${(i+1)} ${timeLimit} ${fileExt} "${flags}"`,true);
+                                } else {
+                                    runTerminal.sendText(`source "${path.join(extDir,"/bashRun.sh")}" "${fileNameWithoutExtension}" "${path.join(testcaseDir,fileList[i])}" "${path.join(testcaseDir,fileList[i+noFiles])}" "${path.join(workspace_path,"/testcases/result.txt")}" "${path.join(extDir,"/comm.txt")}" ${(i+1)} ${timeLimit} ${fileExt}`,true);
+                                }
                             } else {
-                                runTerminal.sendText("source "+path.join(extDir,"/bashRun.sh")+" "+fileNameWithoutExtension+" "+path.join(testcaseDir,fileList[i])+" "+path.join(testcaseDir,fileList[i+noFiles])+" "+path.join(workspace_path,"/testcases/result.txt")+" "+path.join(extDir,"/comm.txt")+" "+(i+1)+" "+timeLimit+" "+fileExt+" "+flags+" ; ",false);
+                                if(flags.length!=0){
+                                    runTerminal.sendText(`source "${path.join(extDir,"/bashRun.sh")}" "${fileNameWithoutExtension}" "${path.join(testcaseDir,fileList[i])}" "${path.join(testcaseDir,fileList[i+noFiles])}" "${path.join(workspace_path,"/testcases/result.txt")}" "${path.join(extDir,"/comm.txt")}" ${(i+1)} ${timeLimit} ${fileExt} "${flags}" ; `,false);
+                                } else {
+                                    runTerminal.sendText(`source "${path.join(extDir,"/bashRun.sh")}" "${fileNameWithoutExtension}" "${path.join(testcaseDir,fileList[i])}" "${path.join(testcaseDir,fileList[i+noFiles])}" "${path.join(workspace_path,"/testcases/result.txt")}" "${path.join(extDir,"/comm.txt")}" ${(i+1)} ${timeLimit} ${fileExt} ; `,false);
+                                }
                             }
                         }
                         runTerminal.sendText("exit 0",true);
